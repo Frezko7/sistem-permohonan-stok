@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
     // Applicant routes
     Route::middleware('usertype:applicant')->group(function () {
         Route::resource('stock_requests', StockRequestController::class)->only(['create', 'store',]); // Applicants can create and view requests
+        // In web.php (routes file)
+        Route::get('/stocks/search', [StockController::class, 'searchStocks'])->name('stocks.search');
     });
 });
 

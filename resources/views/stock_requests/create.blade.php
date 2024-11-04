@@ -35,14 +35,13 @@
             <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ Auth::user()->phone_number }}" readonly>
         </div>
 
-        <!-- Stock Selection -->
-        <div class="mb-3">
-            <label for="stock_id" class="form-label">Select Stock</label>
-            <select class="form-select" id="stock_id" name="stock_id" required>
-                @foreach($stocks as $stock)
-                    <option value="{{ $stock->id }}">{{ $stock->description }} (Available: {{ $stock->quantity }})</option>
-                @endforeach
-            </select>
+        <!-- Stock ID Input with Autocomplete -->
+        <div class="mb-3 position-relative">
+            <label for="stock_id" class="form-label">Enter Stock ID</label>
+            <input type="text" class="form-control" id="stock_id" name="stock_id" placeholder="Enter the stock ID" autocomplete="off" required>
+            
+            <!-- Dropdown for suggestions -->
+            <ul id="stockSuggestions" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></ul>
         </div>
 
         <!-- Requested Quantity -->
@@ -60,4 +59,36 @@
         <button type="submit" class="btn btn-primary">Submit Request</button>
     </form>
 </div>
+
+<script>
+document.getElementById('stock_id').addEventListener('input', function() {
+    const search = this.value;
+    if (search.length > 0) {
+        fetch(`{{ route('stocks.search') }}?search=${search}`)
+            .then(response => response.json())
+            .then(data => {
+                const suggestionsList = document.getElementById('stockSuggestions');
+                suggestionsList.innerHTML = '';
+                
+                if (data.length > 0) {
+                    suggestionsList.style.display = 'block';
+                    data.forEach(stock => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('list-group-item');
+                        listItem.textContent = `ID: ${stock.id} - ${stock.description}`;
+                        listItem.onclick = () => {
+                            document.getElementById('stock_id').value = stock.id;
+                            suggestionsList.style.display = 'none';
+                        };
+                        suggestionsList.appendChild(listItem);
+                    });
+                } else {
+                    suggestionsList.style.display = 'none';
+                }
+            });
+    } else {
+        document.getElementById('stockSuggestions').style.display = 'none';
+    }
+});
+</script>
 @endsection
