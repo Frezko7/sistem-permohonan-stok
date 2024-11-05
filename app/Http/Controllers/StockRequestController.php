@@ -34,7 +34,8 @@ class StockRequestController extends Controller
             'user_id' => Auth::id(),
             'stock_id' => $request->stock_id,
             'requested_quantity' => $request->requested_quantity,
-            'catatan' => $request->catatan, 
+            'catatan' => $request->catatan,
+            'request_date' => $request->request_date, 
         ]);
 
         return redirect()->route('stock_requests.index')->with('success', 'Stock request submitted successfully.');

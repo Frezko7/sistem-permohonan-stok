@@ -8,6 +8,7 @@
     <div class="mb-4">
         <p><strong>Stock ID:</strong> {{ $stockRequest->stock->id }}</p>
         <p><strong>Stock Description:</strong> {{ $stockRequest->stock->description }}</p>
+        <p><strong>Date:</strong> {{ $stockRequest->request_date }}</p>
         <p><strong>Requested Quantity:</strong> {{ $stockRequest->requested_quantity }}</p>
         <p><strong>Available Quantity:</strong> {{ $stockRequest->stock->quantity }}</p>
     </div>
