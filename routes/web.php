@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
 
         // Reject stock request
         Route::get('/stock_requests/{stockRequest}/reject', [StockRequestController::class, 'reject'])->name('stock_requests.reject');
+
+        Route::get('/stock-requests/report', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
+
     });
 
     // Applicant routes

@@ -156,6 +156,7 @@ return [
     */
 
     'providers' => ServiceProvider::defaultProviders()->merge([
+        Barryvdh\DomPDF\ServiceProvider::class,
         /*
          * Package Service Providers...
          */

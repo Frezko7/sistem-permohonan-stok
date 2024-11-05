@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Stock;
 use App\Models\StockRequest;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Auth;
 
 class StockRequestController extends Controller
@@ -14,7 +15,6 @@ class StockRequestController extends Controller
         $stockRequests = StockRequest::with('user', 'stock')->get();
         return view('stock_requests.index', compact('stockRequests'));
     }
-
 
     public function create()
     {
@@ -28,6 +28,7 @@ class StockRequestController extends Controller
             'stock_id' => 'required|exists:stocks,id',
             'requested_quantity' => 'required|integer',
             'catatan' => 'nullable|string|max:255',
+            'request_date' => 'required|date', // Add validation for request_date
         ]);
 
         StockRequest::create([
@@ -35,7 +36,7 @@ class StockRequestController extends Controller
             'stock_id' => $request->stock_id,
             'requested_quantity' => $request->requested_quantity,
             'catatan' => $request->catatan,
-            'request_date' => $request->request_date, 
+            'request_date' => $request->request_date,
         ]);
 
         return redirect()->route('stock_requests.index')->with('success', 'Stock request submitted successfully.');
@@ -47,27 +48,22 @@ class StockRequestController extends Controller
         return view('stock_requests.approve', compact('stockRequest'));
     }
 
-
-
     public function approve(Request $request, $id)
     {
         $stockRequest = StockRequest::findOrFail($id);
 
-        // Validate that approved_quantity is required and does not exceed requested_quantity
         $request->validate([
             'approved_quantity' => 'required|integer|min:1|max:' . $stockRequest->requested_quantity,
         ]);
 
         $approvedQuantity = $request->input('approved_quantity');
 
-        // Set the approved quantity and status
         $stockRequest->approved_quantity = $approvedQuantity;
         $stockRequest->status = 'approved';
         $stockRequest->save();
 
-        // Update the stock quantity based on approved quantity
         $stock = Stock::findOrFail($stockRequest->stock_id);
-        $stock->decreaseQuantity($approvedQuantity); // Decrease based on approved quantity
+        $stock->decreaseQuantity($approvedQuantity); // Make sure this method exists
 
         return redirect()->route('stock_requests.index')->with('success', 'Stock request approved and stock quantity updated successfully.');
     }
@@ -75,11 +71,20 @@ class StockRequestController extends Controller
     public function reject($id)
     {
         $stockRequest = StockRequest::findOrFail($id);
-
-        // Change the status of the stock request
         $stockRequest->status = 'rejected'; // Set the status as rejected
         $stockRequest->save();
 
         return redirect()->route('stock_requests.index')->with('success', 'Stock request rejected successfully.');
+    }
+
+    public function generateReport()
+    {
+        $stockRequests = StockRequest::with(['stock', 'user'])->get();
+
+        $pdf = PDF::loadView('stock_requests.report', [
+            'stockRequests' => $stockRequests,
+        ]);
+
+        return $pdf->download('stock_requests_report.pdf');
     }
 }

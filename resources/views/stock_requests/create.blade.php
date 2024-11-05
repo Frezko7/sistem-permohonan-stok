@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h1>Request Stock</h1>
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-5">Request Stock</h1>
 
         @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-error mb-4">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -14,57 +14,53 @@
             </div>
         @endif
 
-        <form action="{{ route('stock_requests.store') }}" method="POST">
+        <form action="{{ route('stock_requests.store') }}" method="POST" class="bg-base-200 p-6 rounded-lg shadow-md">
             @csrf
 
             <!-- Display User Name -->
-            <div class="mb-3">
-                <label for="user_name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="user_name" name="user_name" value="{{ Auth::user()->name }}"
-                    readonly>
+            <div class="mb-4">
+                <label for="user_name" class="label"><span class="label-text">Name</span></label>
+                <input type="text" class="input input-bordered w-full" id="user_name" name="user_name" value="{{ Auth::user()->name }}" readonly>
             </div>
 
             <!-- Display Bahagian/Unit -->
-            <div class="mb-3">
-                <label for="bahagian_unit" class="form-label">Bahagian/Unit</label>
-                <input type="text" class="form-control" id="bahagian_unit" name="bahagian_unit"
-                    value="{{ Auth::user()->bahagian_unit }}" readonly>
+            <div class="mb-4">
+                <label for="bahagian_unit" class="label"><span class="label-text">Bahagian/Unit</span></label>
+                <input type="text" class="input input-bordered w-full" id="bahagian_unit" name="bahagian_unit" value="{{ Auth::user()->bahagian_unit }}" readonly>
             </div>
 
             <!-- Display Phone Number -->
-            <div class="mb-3">
-                <label for="phone_number" class="form-label">Phone Number</label>
-                <input type="text" class="form-control" id="phone_number" name="phone_number"
-                    value="{{ Auth::user()->phone_number }}" readonly>
+            <div class="mb-4">
+                <label for="phone_number" class="label"><span class="label-text">Phone Number</span></label>
+                <input type="text" class="input input-bordered w-full" id="phone_number" name="phone_number" value="{{ Auth::user()->phone_number }}" readonly>
             </div>
 
             <!-- Stock ID Input with Autocomplete -->
-            <div class="mb-3 position-relative">
-                <label for="stock_id" class="form-label">Enter Stock ID</label>
-                <input type="text" class="form-control" id="stock_id" name="stock_id" placeholder="Enter the stock ID"
-                    autocomplete="off" required>
+            <div class="mb-4 position-relative">
+                <label for="stock_id" class="label"><span class="label-text">Enter Stock ID</span></label>
+                <input type="text" class="input input-bordered w-full" id="stock_id" name="stock_id" placeholder="Enter the stock ID" autocomplete="off" required>
 
                 <!-- Dropdown for suggestions -->
-                <ul id="stockSuggestions" class="list-group position-absolute w-100" style="z-index: 1000; display: none;">
+                <ul id="stockSuggestions" class="list-group position-absolute w-full bg-base-100 shadow-lg" style="z-index: 1000; display: none;">
                 </ul>
             </div>
 
             <!-- Requested Quantity -->
-            <div class="mb-3">
-                <label for="requested_quantity" class="form-label">Requested Quantity</label>
-                <input type="number" class="form-control" id="requested_quantity" name="requested_quantity" required>
+            <div class="mb-4">
+                <label for="requested_quantity" class="label"><span class="label-text">Requested Quantity</span></label>
+                <input type="number" class="input input-bordered w-full" id="requested_quantity" name="requested_quantity" required>
             </div>
 
             <!-- Requested Date -->
-            <div>
-                <label for="request_date">Request Date:</label>
-                <input type="date" name="request_date" id="request_date" class="form-control">
+            <div class="mb-4">
+                <label for="request_date" class="label"><span class="label-text">Request Date</span></label>
+                <input type="date" name="request_date" id="request_date" class="input input-bordered w-full">
             </div>
 
             <!-- Catatan (Notes) -->
-            <div class="mb-3">
-                <label for="catatan" class="form-label">Catatan</label>
-                <textarea class="form-control" id="catatan" name="catatan" rows="3"></textarea>
+            <div class="mb-4">
+                <label for="catatan" class="label"><span class="label-text">Catatan</span></label>
+                <textarea class="textarea textarea-bordered w-full" id="catatan" name="catatan" rows="3"></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">Submit Request</button>
@@ -85,7 +81,7 @@
                             suggestionsList.style.display = 'block';
                             data.forEach(stock => {
                                 const listItem = document.createElement('li');
-                                listItem.classList.add('list-group-item');
+                                listItem.classList.add('list-group-item', 'cursor-pointer', 'hover:bg-gray-200', 'p-2');
                                 listItem.textContent = `ID: ${stock.id} - ${stock.description}`;
                                 listItem.onclick = () => {
                                     document.getElementById('stock_id').value = stock.id;
