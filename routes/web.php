@@ -3,16 +3,20 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockRequestController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
+// Public routes
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Dashboard route
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
+// Authenticated user routes
 Route::middleware('auth')->group(function () {
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -35,18 +39,18 @@ Route::middleware('auth')->group(function () {
         // Reject stock request
         Route::get('/stock_requests/{stockRequest}/reject', [StockRequestController::class, 'reject'])->name('stock_requests.reject');
 
+        // Generate report
         Route::get('/stock-requests/report', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
-
     });
 
     // Applicant routes
     Route::middleware('usertype:applicant')->group(function () {
-        Route::resource('stock_requests', StockRequestController::class)->only(['create', 'store',]); // Applicants can create and view requests
-        // In web.php (routes file)
-        Route::get('/stocks/search', [StockController::class, 'searchStocks'])->name('stocks.search');
+        Route::resource('stock_requests', StockRequestController::class)->only(['create', 'store']); // Applicants can create and view requests
     });
-});
 
+    // Search for stocks
+    Route::get('/stocks/search', [StockController::class, 'searchStocks'])->name('stocks.search');
+});
 
 // Include the authentication routes
 require __DIR__ . '/auth.php';
