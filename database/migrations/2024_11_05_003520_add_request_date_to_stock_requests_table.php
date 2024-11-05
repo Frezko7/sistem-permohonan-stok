@@ -6,13 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
         Schema::table('stock_requests', function (Blueprint $table) {
-            $table->date('request_date')->nullable();
+            $table->date('request_date')->nullable(); // Make it nullable if it's optional
         });
     }
 
