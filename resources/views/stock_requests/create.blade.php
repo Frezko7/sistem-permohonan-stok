@@ -1,8 +1,13 @@
 @extends('layouts.app')
 
+@section('header')
+    <h1 class="font-semibold text-xl text-gray-800 leading-tight">
+        {{ __('Request Stock') }}
+    </h1>
+@endsection
+
 @section('content')
     <div class="container mx-auto mt-10">
-        <h1 class="text-3xl font-bold mb-5">Request Stock</h1>
 
         @if ($errors->any())
             <div class="alert alert-error mb-4">

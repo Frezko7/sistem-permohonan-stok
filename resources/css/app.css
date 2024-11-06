@@ -1,3 +1,70 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.small-box {
+    border-radius: 5px;
+    color: #fff;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 150px;
+}
+
+.small-box .icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 60px;
+    opacity: 0.2;
+}
+
+.small-box .inner {
+    font-weight: bold;
+}
+
+.small-box h3 {
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.small-box p {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.small-box-footer {
+    color: rgba(255, 255, 255, 0.8);
+    display: block;
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.small-box-footer:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.bg-info {
+    background-color: #17a2b8 !important;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+}
+
+.bg-danger {
+    background-color: #dc3545 !important;
+}
+
