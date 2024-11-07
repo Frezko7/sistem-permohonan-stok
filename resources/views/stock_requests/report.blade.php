@@ -28,6 +28,7 @@
 
         .signature {
             padding-top: 30px;
+            text-align: left;
         }
     </style>
 </head>
@@ -69,7 +70,7 @@
                     <td>{{ $request->catatan }}</td>
                     <td>{{ $request->stock->quantity }}</td>
                     <td>{{ $request->approved_quantity }}</td>
-                    <td>{{ $request->approval_note }}</td>
+                    <td> </td>
                     <td> </td>
                     <td> </td>
                 </tr>
@@ -82,19 +83,25 @@
     <table>
         <tr>
             <td class="signature">
-                <strong>Pemohon:</strong><br>
+                <strong>Pemohon:</strong><br><br>
+                <p>.....................................</p><br>
+                (Tandatangan)<br>
                 Nama: {{ $request->user->name }}<br>
                 Jawatan: {{ $request->user->bahagian_unit }}<br>
-                Tarikh: {{ $request->date }}
+                Tarikh: {{ $request->request_date }}
             </td>
             <td class="signature">
-                <strong>Pegawai Pelulus:</strong><br>
+                <strong>Pegawai Pelulus:</strong><br><br>
+                <p>.....................................</p><br>
+                (Tandatangan)<br>
                 Nama: <br>
                 Jawatan: <br>
                 Tarikh:
             </td>
             <td class="signature">
-                <strong>Pemohon/Wakil:</strong><br>
+                <strong>Pemohon/Wakil:</strong><br><br>
+                <p>.....................................</p><br>
+                (Tandatangan)<br>
                 Nama: <br>
                 Jawatan: <br>
                 Tarikh:

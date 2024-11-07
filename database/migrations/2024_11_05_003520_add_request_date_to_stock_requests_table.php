@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('stock_requests', function (Blueprint $table) {
-            $table->date('request_date')->nullable(); // Make it nullable if it's optional
+            $table->date('request_date');
         });
     }
 
