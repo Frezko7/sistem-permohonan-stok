@@ -6,6 +6,7 @@ use App\Models\Stock;
 use App\Models\StockRequest;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Support\Facades\Auth;
 
 class StockRequestController extends Controller
@@ -81,9 +82,9 @@ class StockRequestController extends Controller
     {
         $stockRequests = StockRequest::with(['stock', 'user'])->get();
 
-        $pdf = PDF::loadView('stock_requests.report', [
+        $pdf = FacadePdf::loadView('stock_requests.report', [
             'stockRequests' => $stockRequests,
-        ]);
+        ])->setPaper('a4', 'landscape');
 
         return $pdf->download('stock_requests_report.pdf');
     }
