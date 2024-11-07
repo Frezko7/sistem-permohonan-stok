@@ -40,7 +40,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/stock_requests/{stockRequest}/reject', [StockRequestController::class, 'reject'])->name('stock_requests.reject');
 
         // Generate report
-        Route::get('/stock-requests/report', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
+        //Route::get('/stock-requests/report', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
+
+        // Generate report
+        Route::get('/stock-requests/report', [StockRequestController::class, 'generatePdfReport'])->name('stock_requests.report');
     });
 
     // Applicant routes

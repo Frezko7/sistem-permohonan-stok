@@ -6,6 +6,7 @@ use App\Models\Stock;
 use App\Models\StockRequest;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
+use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\Auth;
 
 class StockRequestController extends Controller
@@ -86,5 +87,21 @@ class StockRequestController extends Controller
         ]);
 
         return $pdf->download('stock_requests_report.pdf');
+    }
+
+    public function generatePdfReport()
+    {
+        // Load the view with data
+        $stockRequests = StockRequest::with(['user', 'stock'])->get();
+        $html = view('stock_requests.index', compact('stockRequests'))->render();
+
+        // Generate PDF
+        $pdfPath = storage_path('app/public/stock_requests_report.pdf'); // You can choose your preferred storage path
+
+        Browsershot::html($html)
+            ->setPaper('A4')
+            ->save($pdfPath);
+
+        return response()->download($pdfPath, 'stock_requests_report.pdf');
     }
 }

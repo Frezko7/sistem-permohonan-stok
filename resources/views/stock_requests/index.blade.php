@@ -14,7 +14,7 @@
 
             <div class="mb-4">
                 <a href="{{ route('stock_requests.report') }}" class="btn btn-primary" target="_blank">Generate PDF Report</a>
-            </div>
+            </div>            
             
             <table class="table table-zebra w-full">
                 <thead>

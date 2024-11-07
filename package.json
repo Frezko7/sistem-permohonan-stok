@@ -17,6 +17,7 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
-        "admin-lte": "^4.0.0-beta2"
+        "admin-lte": "^4.0.0-beta2",
+        "puppeteer": "^23.7.0"
     }
 }
