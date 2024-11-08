@@ -9,11 +9,11 @@ class StockRequest extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'stock_id', 'requested_quantity', 'status','catatan'];
+    protected $fillable = ['user_id', 'status', 'catatan', 'request_date'];
 
-    public function stock()
+    public function stockRequestItems()
     {
-        return $this->belongsTo(Stock::class);
+        return $this->hasMany(StockRequestItem::class);
     }
 
     public function user()
