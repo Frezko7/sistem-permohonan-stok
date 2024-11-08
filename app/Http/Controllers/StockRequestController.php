@@ -24,24 +24,28 @@ class StockRequestController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'stock_id' => 'required|exists:stocks,id',
-            'requested_quantity' => 'required|integer',
-            'catatan' => 'nullable|string|max:255',
-            'request_date' => 'required|date', // Add validation for request_date
-        ]);
+{
+    $validatedData = $request->validate([
+        'stock_ids' => 'required|array',
+        'stock_ids.*' => 'exists:stocks,id',
+        'requested_quantities' => 'required|array',
+        'requested_quantities.*' => 'integer|min:1',
+    ]);
+
+    foreach ($request->stock_ids as $index => $stockId) {
+        $requestedQuantity = $request->requested_quantities[$index];
 
         StockRequest::create([
-            'user_id' => Auth::id(),
-            'stock_id' => $request->stock_id,
-            'requested_quantity' => $request->requested_quantity,
-            'catatan' => $request->catatan,
-            'request_date' => $request->request_date,
+            'user_id' => auth()->id(),
+            'stock_id' => $stockId,
+            'requested_quantity' => $requestedQuantity,
+            'status' => 'pending',
+            'catatan' => $request->input('catatan') ?? null,
         ]);
-
-        return redirect()->route('stock_requests.index')->with('success', 'Stock request submitted successfully.');
     }
+
+    return redirect()->route('stock_requests.create')->with('success', 'Stock request submitted successfully!');
+}
 
     public function showApprovalForm($id)
     {
@@ -78,14 +82,17 @@ class StockRequestController extends Controller
         return redirect()->route('stock_requests.index')->with('success', 'Stock request rejected successfully.');
     }
 
-    public function generateReport()
-    {
-        $stockRequests = StockRequest::with(['stock', 'user'])->get();
+    public function generateReportById($id)
+{
+    // Fetch the specific stock request by ID with its relationships
+    $stockRequest = StockRequest::with(['stock', 'user'])->findOrFail($id);
 
-        $pdf = FacadePdf::loadView('stock_requests.report', [
-            'stockRequests' => $stockRequests,
-        ])->setPaper('a4', 'landscape');
+    // Generate the PDF for the specific stock request
+    $pdf = FacadePdf::loadView('stock_requests.report', [
+        'stockRequest' => $stockRequest,
+    ])->setPaper('a4', 'landscape');
 
-        return $pdf->download('stock_requests_report.pdf');
-    }
+    // Return the generated PDF for download
+    return $pdf->download('stock_request_' . $stockRequest->id . '_report.pdf');
+}
 }

@@ -8,7 +8,6 @@
 
 @section('content')
     <div class="container mx-auto mt-10">
-
         @if ($errors->any())
             <div class="alert alert-error mb-4">
                 <ul>
@@ -19,43 +18,47 @@
             </div>
         @endif
 
+        <!-- Success Message -->
+        @if (session('success'))
+            <div class="alert alert-success mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <form action="{{ route('stock_requests.store') }}" method="POST" class="bg-base-200 p-6 rounded-lg shadow-md">
             @csrf
 
-            <!-- Display User Name -->
+            <!-- Display User Info (Name, Bahagian, Phone Number) -->
             <div class="mb-4">
                 <label for="user_name" class="label"><span class="label-text">Name</span></label>
                 <input type="text" class="input input-bordered w-full" id="user_name" name="user_name" value="{{ Auth::user()->name }}" readonly>
             </div>
 
-            <!-- Display Bahagian/Unit -->
             <div class="mb-4">
                 <label for="bahagian_unit" class="label"><span class="label-text">Bahagian/Unit</span></label>
                 <input type="text" class="input input-bordered w-full" id="bahagian_unit" name="bahagian_unit" value="{{ Auth::user()->bahagian_unit }}" readonly>
             </div>
 
-            <!-- Display Phone Number -->
             <div class="mb-4">
                 <label for="phone_number" class="label"><span class="label-text">Phone Number</span></label>
                 <input type="text" class="input input-bordered w-full" id="phone_number" name="phone_number" value="{{ Auth::user()->phone_number }}" readonly>
             </div>
 
-            <!-- Stock ID Input with Autocomplete -->
-            <div class="mb-4 position-relative">
-                <label for="stock_id" class="label"><span class="label-text">Enter Stock ID</span></label>
-                <input type="text" class="input input-bordered w-full" id="stock_id" name="stock_id" placeholder="Enter the stock ID" autocomplete="off" required>
+            <!-- Stock Items Section (Dynamic) -->
+            <div id="stock-items">
+                <div class="stock-item mb-4">
+                    <label for="stock_id[]" class="label"><span class="label-text">Enter Stock ID</span></label>
+                    <input type="text" class="input input-bordered w-full stock-id" name="stock_ids[]" placeholder="Enter stock ID" autocomplete="off" required>
+                    
+                    <ul class="stock-suggestions list-group position-absolute w-full bg-base-100 shadow-lg" style="z-index: 1000; display: none;"></ul>
 
-                <!-- Dropdown for suggestions -->
-                <ul id="stockSuggestions" class="list-group position-absolute w-full bg-base-100 shadow-lg" style="z-index: 1000; display: none;">
-                </ul>
+                    <label for="requested_quantity[]" class="label"><span class="label-text">Requested Quantity</span></label>
+                    <input type="number" class="input input-bordered w-full" name="requested_quantities[]" placeholder="Quantity" required>
+                </div>
             </div>
 
-            <!-- Requested Quantity -->
-            <div class="mb-4">
-                <label for="requested_quantity" class="label"><span class="label-text">Requested Quantity</span></label>
-                <input type="number" class="input input-bordered w-full" id="requested_quantity" name="requested_quantity" required>
-            </div>
-
+            <button type="button" id="add-stock-item" class="btn btn-secondary mt-4">Add More Items</button>
+ 
             <!-- Requested Date -->
             <div class="mb-4">
                 <label for="request_date" class="label"><span class="label-text">Request Date</span></label>
@@ -73,34 +76,53 @@
     </div>
 
     <script>
-        document.getElementById('stock_id').addEventListener('input', function() {
-            const search = this.value;
-            if (search.length > 0) {
-                fetch(`{{ route('stocks.search') }}?search=${search}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const suggestionsList = document.getElementById('stockSuggestions');
-                        suggestionsList.innerHTML = '';
+        // Handle dynamic stock item fields
+        document.getElementById('add-stock-item').addEventListener('click', function() {
+            let stockItemHTML = `
+                <div class="stock-item mb-4">
+                    <label for="stock_id[]" class="label"><span class="label-text">Enter Stock ID</span></label>
+                    <input type="text" class="input input-bordered w-full stock-id" name="stock_ids[]" placeholder="Enter stock ID" autocomplete="off" required>
+                    
+                    <ul class="stock-suggestions list-group position-absolute w-full bg-base-100 shadow-lg" style="z-index: 1000; display: none;"></ul>
 
-                        if (data.length > 0) {
-                            suggestionsList.style.display = 'block';
-                            data.forEach(stock => {
-                                const listItem = document.createElement('li');
-                                listItem.classList.add('list-group-item', 'cursor-pointer', 'hover:bg-gray-200', 'p-2');
-                                listItem.textContent = `ID: ${stock.id} - ${stock.description}`;
-                                listItem.onclick = () => {
-                                    document.getElementById('stock_id').value = stock.id;
-                                    suggestionsList.style.display = 'none';
-                                };
-                                suggestionsList.appendChild(listItem);
-                            });
-                        } else {
-                            suggestionsList.style.display = 'none';
-                        }
-                    });
-            } else {
-                document.getElementById('stockSuggestions').style.display = 'none';
-            }
+                    <label for="requested_quantity[]" class="label"><span class="label-text">Requested Quantity</span></label>
+                    <input type="number" class="input input-bordered w-full" name="requested_quantities[]" placeholder="Quantity" required>
+                </div>
+            `;
+            document.getElementById('stock-items').insertAdjacentHTML('beforeend', stockItemHTML);
+        });
+
+        // Autocomplete functionality for stock ID input fields
+        document.querySelectorAll('.stock-id').forEach(input => {
+            input.addEventListener('input', function() {
+                const search = this.value;
+                const suggestionsList = this.nextElementSibling; // Stock suggestions UL
+
+                if (search.length > 0) {
+                    fetch(`{{ route('stocks.search') }}?search=${search}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            suggestionsList.innerHTML = '';
+                            if (data.length > 0) {
+                                suggestionsList.style.display = 'block';
+                                data.forEach(stock => {
+                                    const listItem = document.createElement('li');
+                                    listItem.classList.add('list-group-item', 'cursor-pointer', 'hover:bg-gray-200', 'p-2');
+                                    listItem.textContent = `ID: ${stock.id} - ${stock.description}`;
+                                    listItem.onclick = () => {
+                                        this.value = stock.id;
+                                        suggestionsList.style.display = 'none';
+                                    };
+                                    suggestionsList.appendChild(listItem);
+                                });
+                            } else {
+                                suggestionsList.style.display = 'none';
+                            }
+                        });
+                } else {
+                    suggestionsList.style.display = 'none';
+                }
+            });
         });
     </script>
 @endsection
