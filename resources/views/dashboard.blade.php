@@ -13,30 +13,6 @@
                 <!-- Dashboard Boxes -->
                 <div class="row mt-4">
                     <div class="col-lg-3 col-6">
-                        <div class="small-box bg-info">
-                            <div class="inner">
-                                <h3>150</h3>
-                                <p>New Orders</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-shopping-cart"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <h3>53<sup style="font-size: 20px">%</sup></h3>
-                                <p>Bounce Rate</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-chart-bar"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-6">
                         <div class="small-box bg-warning">
                             <div class="inner">
                                 <h3>{{ $userCount }}</h3>
@@ -45,21 +21,39 @@
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
                             </div>
-                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-danger">
-                            <div class="inner">
-                                <h3>65</h3>
-                                <p>Unique Visitors</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-chart-pie"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
+                </div>
+
+                <!-- Approved Stock Requests -->
+                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg bg-blue-100">
+                    <h2 class="text-xl font-semibold mb-4">Permohonan Stok yang Diluluskan</h2>
+                    @if ($approvedRequests->isEmpty())
+                        <p>Tiada permohonan stok yang diluluskan.</p>
+                    @else
+                        <table class="table table-zebra w-full">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Perihal Stok</th>
+                                    <th>Kuantiti Diluluskan</th>
+                                    <th>Tarikh Diluluskan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($approvedRequests as $request)
+                                    <tr>
+                                        <td>{{ $request->id }}</td>
+                                        <td>{{ $request->stock->description }}</td>
+                                        <td>{{ $request->approved_quantity }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($request->updated_at)->format('d/m/Y') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
                 </div>
             </div>
         </div>

@@ -19,7 +19,12 @@
     </header>
 
     <main>
-        @yield('content') <!-- This will be filled by the specific page -->
+
+        <!-- Add background class here -->
+        <div class="min-h-screen bg-cover bg-center"
+            style="background-image: url('{{ asset('path/to/your/background.jpg') }}');">
+            @yield('content') <!-- Content section -->
+        </div>
     </main>
 
     <!-- Footer -->

@@ -82,6 +82,11 @@ class StockRequestController extends Controller
     foreach ($approvedQuantities as $requestId => $approvedQuantity) {
         $stockRequest = StockRequest::findOrFail($requestId);
 
+        // Skip already approved stock requests
+        if ($stockRequest->status === 'approved') {
+            continue; // Move to the next iteration
+        }
+
         // Ensure the approved quantity is valid
         if ($approvedQuantity <= $stockRequest->requested_quantity) {
             $stockRequest->approved_quantity = $approvedQuantity;
@@ -94,7 +99,7 @@ class StockRequestController extends Controller
         }
     }
 
-    return redirect()->route('stock_requests.index')->with('success', 'All stock requests have been approved.');
+    return redirect()->route('stock_requests.index')->with('success', 'All pending stock requests have been approved.');
 }
 
     public function reject($id)

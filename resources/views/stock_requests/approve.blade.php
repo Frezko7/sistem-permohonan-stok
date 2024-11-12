@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mx-auto mt-10">
-        <h1 class="text-2xl font-bold mb-4">Pengesahan Semua Permohonan Stok</h1>
+        <h1 class="text-2xl font-bold mb-4">Pengesahan Permohonan Stok</h1>
 
         <!-- User Information -->
         <div class="mb-6">
@@ -30,18 +30,31 @@
                     </thead>
                     <tbody>
                         @foreach ($userStockRequests as $request)
-                            <tr>
-                                <td>{{ $request->id }}</td>
-                                <td>{{ $request->stock->id }}</td>
-                                <td>{{ $request->stock->description }}</td>
-                                <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
-                                <td>{{ $request->requested_quantity }}</td>
-                                <td>
-                                    <input type="number" name="approved_quantities[{{ $request->id }}]"
-                                        class="input input-bordered w-full" min="1"
-                                        max="{{ $request->requested_quantity }}" required>
-                                </td>
-                            </tr>
+                            @if ($request->status === 'pending')
+                                <tr>
+                                    <td>{{ $request->id }}</td>
+                                    <td>{{ $request->stock->id }}</td>
+                                    <td>{{ $request->stock->description }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
+                                    <td>{{ $request->requested_quantity }}</td>
+                                    <td>
+                                        <input type="number" name="approved_quantities[{{ $request->id }}]"
+                                            class="input input-bordered w-full" min="1"
+                                            max="{{ $request->requested_quantity }}" required>
+                                    </td>
+                                </tr>
+                            @else
+                                <tr class="bg-gray-100">
+                                    <td>{{ $request->id }}</td>
+                                    <td>{{ $request->stock->id }}</td>
+                                    <td>{{ $request->stock->description }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
+                                    <td>{{ $request->requested_quantity }}</td>
+                                    <td>
+                                        <span class="text-green-600 font-semibold">Diluluskan</span>
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
