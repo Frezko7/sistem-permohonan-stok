@@ -1,31 +1,54 @@
-
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto mt-10">
-    <h1 class="text-2xl font-bold mb-4">Approve Stock Request</h1>
-    
-    <div class="mb-4">
-        <p><strong>Stock ID:</strong> {{ $stockRequest->stock->id }}</p>
-        <p><strong>Stock Description:</strong> {{ $stockRequest->stock->description }}</p>
-        <p><strong>Date:</strong> {{ $stockRequest->request_date }}</p>
-        <p><strong>Requested Quantity:</strong> {{ $stockRequest->requested_quantity }}</p>
-        <p><strong>Available Quantity:</strong> {{ $stockRequest->stock->quantity }}</p>
-    </div>
-    
-    <form action="{{ route('stock_requests.approve', $stockRequest->id) }}" method="POST">
-        @csrf
-        <div class="mb-4">
-            <label for="approved_quantity" class="block text-sm font-medium">Approved Quantity</label>
-            <input type="number" name="approved_quantity" id="approved_quantity" class="input input-bordered w-full" 
-                   min="1" max="{{ $stockRequest->requested_quantity }}" required>
-            @error('approved_quantity')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-            @enderror
+    <div class="container mx-auto mt-10">
+        <h1 class="text-2xl font-bold mb-4">Pengesahan Semua Permohonan Stok</h1>
+
+        <!-- User Information -->
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-2">Maklumat Pemohon</h2>
+            <p><strong>Nama:</strong> {{ $stockRequest->user->name }}</p>
+            <p><strong>Bahagian/Unit:</strong> {{ $stockRequest->user->bahagian_unit ?? '-' }}</p>
+            <p><strong>No. Telefon:</strong> {{ $stockRequest->user->phone_number ?? '-' }}</p>
         </div>
-        
-        <button type="submit" class="btn btn-success">Approve</button>
-        <a href="{{ route('stock_requests.index') }}" class="btn btn-secondary ml-2">Cancel</a>
-    </form>
-</div>
+
+        <!-- Approval Form for All Stock Requests -->
+        <form action="{{ route('stock_requests.approve_all') }}" method="POST">
+            @csrf
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">Senarai Permohonan Stok</h2>
+                <table class="table table-zebra w-full">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>No. Kod</th>
+                            <th>Perihal Stok</th>
+                            <th>Tarikh</th>
+                            <th>Kuantiti Dimohon</th>
+                            <th>Kuantiti Diluluskan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($userStockRequests as $request)
+                            <tr>
+                                <td>{{ $request->id }}</td>
+                                <td>{{ $request->stock->id }}</td>
+                                <td>{{ $request->stock->description }}</td>
+                                <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
+                                <td>{{ $request->requested_quantity }}</td>
+                                <td>
+                                    <input type="number" name="approved_quantities[{{ $request->id }}]"
+                                        class="input input-bordered w-full" min="1"
+                                        max="{{ $request->requested_quantity }}" required>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="submit" class="btn btn-success">Luluskan Semua</button>
+            <a href="{{ route('stock_requests.index') }}" class="btn btn-secondary ml-2">Batal</a>
+        </form>
+    </div>
 @endsection

@@ -36,11 +36,15 @@ Route::middleware('auth')->group(function () {
         // Process the approval (POST request)
         Route::post('/stock_requests/{stockRequest}/approve', [StockRequestController::class, 'approve'])->name('stock_requests.approve');
 
+        Route::post('/stock_requests/approve_all', [StockRequestController::class, 'approveAll'])->name('stock_requests.approve_all');
+
         // Reject stock request
         Route::get('/stock_requests/{stockRequest}/reject', [StockRequestController::class, 'reject'])->name('stock_requests.reject');
 
         // Generate report
         Route::get('/stock-requests/report', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
+
+        Route::get('/stock_requests/user/{userId}', [StockRequestController::class, 'userStockRequests'])->name('stock_requests.userRequests');
 
     });
 

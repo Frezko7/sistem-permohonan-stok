@@ -11,22 +11,17 @@
         @endif
 
         <div class="overflow-x-auto">
-
             <div class="mb-4">
                 <a href="{{ route('stock_requests.report') }}" class="btn btn-primary" target="_blank">Generate PDF Report</a>
             </div>
-            
+
             <table class="table table-zebra w-full">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>No.Kod</th>
-                        <th>Perihal Stok</th>
+                        <th>No.</th>
                         <th>Nama Pemohon</th>
                         <th>Bahagian/Unit</th>
                         <th>Phone Number</th>
-                        <th>Kuantiti Dimohon</th>
-                        <th>Baki Sedia Ada</th>
                         <th>Status</th>
                         @if (auth()->user()->usertype === 'admin')
                             <th>Actions</th>
@@ -37,13 +32,9 @@
                     @foreach ($stockRequests as $request)
                         <tr>
                             <td>{{ $request->id }}</td>
-                            <td>{{ $request->stock->id }}</td>
-                            <td>{{ $request->stock->description }}</td>
                             <td>{{ $request->user->name }}</td>
                             <td>{{ $request->user->bahagian_unit ?? '-' }}</td>
                             <td>{{ $request->user->phone_number ?? '-' }}</td>
-                            <td>{{ $request->requested_quantity }}</td>
-                            <td>{{ $request->stock->quantity }}</td>
                             <td>
                                 <span
                                     class="badge {{ $request->status === 'pending' ? 'badge-warning' : ($request->status === 'approved' ? 'badge-success' : 'badge-error') }}">

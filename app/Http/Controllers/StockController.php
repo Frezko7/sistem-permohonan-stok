@@ -43,22 +43,26 @@ class StockController extends Controller
 
     // Update stock
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'quantity' => 'required|integer',
-            // Other validation rules...
-        ]);
+{
+    // Validate input data
+    $request->validate([
+        'description' => 'required|string|max:255',
+        'quantity' => 'required|integer|min:1', // Ensure the quantity is at least 1
+    ]);
 
-        $stock = Stock::findOrFail($id);
-        $stock->name = $request->input('name');
-        $stock->quantity = $request->input('quantity');
-        // Update other fields...
+    // Find the stock by ID
+    $stock = Stock::findOrFail($id);
 
-        $stock->save();
+    // Update the stock with validated data
+    $stock->description = $request->input('description');
+    $stock->quantity = $request->input('quantity');
 
-        return redirect()->route('stocks.index')->with('success', 'Stock updated successfully.');
-    }
+    // Save the changes to the stock
+    $stock->save();
+
+    // Redirect with success message
+    return redirect()->route('stocks.index')->with('success', 'Stock updated successfully.');
+}
 
     // Delete stock
     public function destroy($id)
