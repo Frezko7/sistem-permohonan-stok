@@ -19,19 +19,31 @@ class StockController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'description' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
-        ]);
+{
+    // Validate the request, including the image
+    $request->validate([
+        'description' => 'required|string|max:255',
+        'quantity' => 'required|integer|min:1',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Add image validation
+    ]);
 
-        Stock::create([
-            'description' => $request->description,
-            'quantity' => $request->quantity,
-        ]);
-
-        return redirect()->route('stocks.index')->with('success', 'Stock added successfully!');
+    // Handle image upload if present
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+        // Store the image in the 'public/images' directory
+        $imagePath = $request->file('image')->store('images', 'public');
     }
+
+    // Create the stock with the image path
+    Stock::create([
+        'description' => $request->description,
+        'quantity' => $request->quantity,
+        'image' => $imagePath, // Save the image path in the database
+    ]);
+
+    return redirect()->route('stocks.index')->with('success', 'Stock added successfully!');
+}
+
 
     // Show edit form
     public function edit($id)

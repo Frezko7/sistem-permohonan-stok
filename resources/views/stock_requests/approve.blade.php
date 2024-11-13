@@ -1,8 +1,13 @@
 @extends('layouts.app')
 
+@section('header')
+    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        {{ __('Pengesahan Permohonan Stok') }}
+    </h2>
+@endsection
+
 @section('content')
     <div class="container mx-auto mt-10">
-        <h1 class="text-2xl font-bold mb-4">Pengesahan Permohonan Stok</h1>
 
         <!-- User Information -->
         <div class="mb-6">

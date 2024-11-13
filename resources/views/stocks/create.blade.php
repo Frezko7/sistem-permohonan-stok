@@ -1,31 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Add New Stock</h1>
+    <div class="container">
+        <h1>Add New Stock</h1>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg bg-blue-100">
+            <form action="{{ route('stocks.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-4">
+                    <label for="description" class="form-label">Perihal Stok:</label>
+                    <input type="text" name="description" id="description" class="form-input" required>
+                </div>
+                <div class="mb-4">
+                    <label for="quantity" class="form-label">Kuantiti:</label>
+                    <input type="number" name="quantity" id="quantity" class="form-input" required min="1">
+                </div>
+                <div class="mb-4">
+                    <label for="image" class="form-label">Gambar Stok:</label>
+                    <input type="file" name="image" id="image" class="form-input" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn btn-success">Tambah Stok</button>
+            </form>
         </div>
-    @endif
-
-    <form action="{{ route('stocks.store') }}" method="POST">
-        @csrf
-        <div class="mb-4">
-            <label for="description" class="form-label">Description</label>
-            <input type="text" name="description" id="description" class="form-input" required>
-        </div>
-        <div class="mb-4">
-            <label for="quantity" class="form-label">Quantity</label>
-            <input type="number" name="quantity" id="quantity" class="form-input" required min="1">
-        </div>
-        <button type="submit" class="btn btn-success">Add Stock</button>
-    </form>
-    
-</div>
+    </div>
 @endsection

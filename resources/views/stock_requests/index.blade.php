@@ -1,8 +1,13 @@
 @extends('layouts.app')
 
+@section('header')
+    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        {{ __('Permohonan Stok') }}
+    </h2>
+@endsection
+
 @section('content')
     <div class="container mx-auto mt-10">
-        <h1 class="text-2xl font-bold mb-4">Stock Requests</h1>
 
         @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">

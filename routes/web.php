@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockRequestController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CatalogController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -25,6 +26,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
+
+    Route::get('/stock/{id}', [CatalogController::class, 'show'])->name('stock.show');
+
 
     // Admin routes
     Route::middleware('usertype:admin')->group(function () {
