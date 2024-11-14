@@ -8,18 +8,16 @@
 
 @section('content')
     <div class="container">
-        <div class="row d-flex flex-wrap justify-content-between">
+        <div class="row">
             @foreach ($stocks as $stock)
-                <!-- Change col-md-6 to col-md-4 for 3 columns layout -->
-                <div class="col-md-4 col-sm-12 mb-4">
-                    <div class="card">
-                        <!-- Image with stock description -->
+                <div class="col-md-3 col-sm-12 mb-4">
+                    <div class="card" style="width: 100%;"> <!-- Ensures cards fill the column width -->
                         <img src="{{ asset('storage/' . $stock->image) }}" class="card-img-top"
                             alt="{{ $stock->description }}">
-                        <div class="card-body">
+                        <div class="card-body d-flex flex-column">
                             <h5 class="card-title">{{ $stock->description }}</h5>
-                            <p class="card-text">Quantity: {{ $stock->quantity }}</p>
-                            <a href="{{ route('stock.show', $stock->id) }}" class="btn btn-primary">View Details</a>
+                            <p class="card-text">No. Kod: {{ $stock->id }}</p>
+                            <a href="{{ route('stock.show', $stock->id) }}" class="btn btn-primary mt-auto">View Details</a>
                         </div>
                     </div>
                 </div>
