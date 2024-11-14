@@ -31,39 +31,40 @@
             <!-- Display User Info (Name, Bahagian, Phone Number) -->
             <div class="mb-4">
                 <label for="user_name" class="label"><span class="label-text">Name</span></label>
-                <input type="text" class="input input-bordered w-full" id="user_name" name="user_name" value="{{ Auth::user()->name }}" readonly>
+                <input type="text" class="input input-bordered w-full" id="user_name" name="user_name"
+                    value="{{ Auth::user()->name }}" readonly>
             </div>
 
             <div class="mb-4">
                 <label for="bahagian_unit" class="label"><span class="label-text">Bahagian/Unit</span></label>
-                <input type="text" class="input input-bordered w-full" id="bahagian_unit" name="bahagian_unit" value="{{ Auth::user()->bahagian_unit }}" readonly>
+                <input type="text" class="input input-bordered w-full" id="bahagian_unit" name="bahagian_unit"
+                    value="{{ Auth::user()->bahagian_unit }}" readonly>
             </div>
 
             <div class="mb-4">
                 <label for="phone_number" class="label"><span class="label-text">Phone Number</span></label>
-                <input type="text" class="input input-bordered w-full" id="phone_number" name="phone_number" value="{{ Auth::user()->phone_number }}" readonly>
+                <input type="text" class="input input-bordered w-full" id="phone_number" name="phone_number"
+                    value="{{ Auth::user()->phone_number }}" readonly>
             </div>
 
             <!-- Stock Items Section (Dynamic) -->
             <div id="stock-items">
                 <div class="stock-item mb-4">
                     <label for="stock_id[]" class="label"><span class="label-text">Enter Stock ID</span></label>
-                    <input type="text" class="input input-bordered w-full stock-id" name="stock_ids[]" placeholder="Enter stock ID" autocomplete="off" required>
-                    
-                    <ul class="stock-suggestions list-group position-absolute w-full bg-base-100 shadow-lg" style="z-index: 1000; display: none;"></ul>
+                    <input type="text" class="input input-bordered w-full stock-id" name="stock_ids[]"
+                        placeholder="Enter stock ID" autocomplete="off" required>
 
-                    <label for="requested_quantity[]" class="label"><span class="label-text">Requested Quantity</span></label>
-                    <input type="number" class="input input-bordered w-full" name="requested_quantities[]" placeholder="Quantity" required>
+                    <ul class="stock-suggestions list-group position-absolute w-full bg-base-100 shadow-lg"
+                        style="z-index: 1000; display: none;"></ul>
+
+                    <label for="requested_quantity[]" class="label"><span class="label-text">Requested
+                            Quantity</span></label>
+                    <input type="number" class="input input-bordered w-full" name="requested_quantities[]"
+                        placeholder="Quantity" required>
                 </div>
             </div>
 
             <button type="button" id="add-stock-item" class="btn btn-secondary mt-4">Add More Items</button>
- 
-            <!-- Requested Date -->
-            <div class="mb-4">
-                <label for="request_date" class="label"><span class="label-text">Request Date</span></label>
-                <input type="date" name="request_date" id="request_date" class="input input-bordered w-full">
-            </div>
 
             <!-- Catatan (Notes) -->
             <div class="mb-4">
@@ -107,8 +108,10 @@
                                 suggestionsList.style.display = 'block';
                                 data.forEach(stock => {
                                     const listItem = document.createElement('li');
-                                    listItem.classList.add('list-group-item', 'cursor-pointer', 'hover:bg-gray-200', 'p-2');
-                                    listItem.textContent = `ID: ${stock.id} - ${stock.description}`;
+                                    listItem.classList.add('list-group-item', 'cursor-pointer',
+                                        'hover:bg-gray-200', 'p-2');
+                                    listItem.textContent =
+                                        `ID: ${stock.id} - ${stock.description}`;
                                     listItem.onclick = () => {
                                         this.value = stock.id;
                                         suggestionsList.style.display = 'none';
