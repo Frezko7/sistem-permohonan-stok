@@ -29,7 +29,7 @@
 
                 <!-- Approved Stock Requests -->
                 <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg bg-blue-100">
-                    <h2 class="text-xl font-semibold mb-4">Permohonan Stok yang Diluluskan</h2>
+                    <h2 class="text-xl font-semibold mb-8">Status Permohonan</h2>
                     @if ($approvedRequests->isEmpty())
                         <p>Tiada permohonan stok yang diluluskan.</p>
                     @else
