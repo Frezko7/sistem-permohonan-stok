@@ -114,6 +114,7 @@ class StockRequestController extends Controller
 
     public function generateReport($id)
     {
+        
         // Fetch the specific stock request by ID with its relationships
         $stockRequest = StockRequest::with(['stock', 'user'])->findOrFail($id);
 

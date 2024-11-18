@@ -18,7 +18,7 @@ class CatalogController extends Controller
    {
     $stock = Stock::findOrFail($id);
 
-    return view('catalog.show', compact('stock'));
+    return view('catalog.show', compact('stocks'));
    }
 
 }

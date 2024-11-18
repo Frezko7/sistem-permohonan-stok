@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Add New Stock</h1>
+        <h1> Tambah Stok</h1>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -13,7 +13,7 @@
                 </ul>
             </div>
         @endif
-        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg bg-blue-100">
+        <div class="p-4 sm:p-8 bg-secondary sm:rounded-lg bg-blue-100">
             <form action="{{ route('stocks.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-4">

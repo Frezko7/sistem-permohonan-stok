@@ -2,12 +2,12 @@
     <header class="d-flex align-items-center mb-3">
         <i class="bi bi-person-circle fs-3 me-2"></i>
         <h2 class="h4 mb-0 text-primary">
-            {{ __('Profile Information') }}
+            {{ __('Maklumat Pengguna') }}
         </h2>
     </header>
 
     <p class="text-muted mb-4">
-        {{ __("Update your account's profile information.") }}
+        {{ __('Kemaskini maklumat pengguna.') }}
     </p>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
@@ -19,7 +19,7 @@
         @method('patch')
 
         <div class="mb-3">
-            <label for="name" class="form-label">{{ __('Name') }}</label>
+            <label for="name" class="form-label">{{ __('Nama') }}</label>
             <input id="name" name="name" type="text" class="form-control"
                 value="{{ old('name', $user->name) }}" required autofocus autocomplete="name">
             @error('name')
@@ -56,7 +56,7 @@
 
         <!-- Phone Number Field -->
         <div class="mb-3">
-            <label for="phone_number" class="form-label">{{ __('Phone Number') }}</label>
+            <label for="phone_number" class="form-label">{{ __('No. Telefon ') }}</label>
             <input id="phone_number" name="phone_number" type="text" class="form-control"
                 value="{{ old('phone_number', $user->phone_number) }}" required autocomplete="phone">
             @error('phone_number')
@@ -75,11 +75,11 @@
         </div>
 
         <div class="d-flex align-items-center gap-3">
-            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+            <button type="submit" class="btn btn-primary">{{ __('Simpan') }}</button>
 
             @if (session('status') === 'profile-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                    class="text-success mb-0">{{ __('Saved.') }}</p>
+                    class="text-success mb-0">{{ __('Berjaya disimpan.') }}</p>
             @endif
         </div>
     </form>

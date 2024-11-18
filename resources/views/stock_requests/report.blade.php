@@ -61,8 +61,10 @@
         </thead>
         <tbody>
 
+
+
             <!-- Loop through your stock requests here -->
-            @foreach ($stockRequests as $request)
+            @foreach ($stockRequest as $request)
                 <tr>
                     <td>{{ $request->stock->id }}</td>
                     <td>{{ $request->stock->description }}</td>

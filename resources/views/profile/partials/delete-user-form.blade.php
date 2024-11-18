@@ -1,15 +1,15 @@
 <section class="mt-5 p-4 border rounded shadow-sm">
     <header class="mb-3">
         <h2 class="h4 text-danger">
-            {{ __('Delete Account') }}
+            {{ __('Hapus Akaun') }}
         </h2>
         <p class="text-muted">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
+            {{ __('Setelah akaun anda dipadamkan, semua sumber dan datanya akan dipadamkan secara kekal. Sebelum memadamkan akaun anda, sila muat turun sebarang data atau maklumat yang ingin anda simpan.') }}
         </p>
     </header>
 
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmUserDeletionModal">
-        {{ __('Delete Account') }}
+        {{ __('Hapus Akaun') }}
     </button>
 
     <!-- Modal -->

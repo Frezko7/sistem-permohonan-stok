@@ -1,11 +1,8 @@
 <section class="container mt-5 p-4 border rounded shadow-sm">
     <header class="mb-3">
         <h2 class="h4 text-primary">
-            {{ __('Update Password') }}
+            {{ __('Kemaskini Kata Laluan') }}
         </h2>
-        <p class="text-muted">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
-        </p>
     </header>
 
     <form method="post" action="{{ route('password.update') }}" class="mb-4">
@@ -13,7 +10,7 @@
         @method('put')
 
         <div class="mb-3">
-            <label for="update_password_current_password" class="form-label">{{ __('Current Password') }}</label>
+            <label for="update_password_current_password" class="form-label">{{ __('Kata Laluan Lama') }}</label>
             <input id="update_password_current_password" name="current_password" type="password" class="form-control"
                 autocomplete="current-password">
             @if ($errors->updatePassword->has('current_password'))
@@ -22,7 +19,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="update_password_password" class="form-label">{{ __('New Password') }}</label>
+            <label for="update_password_password" class="form-label">{{ __('Kata Laluan Baru') }}</label>
             <input id="update_password_password" name="password" type="password" class="form-control"
                 autocomplete="new-password">
             @if ($errors->updatePassword->has('password'))
@@ -31,7 +28,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="update_password_password_confirmation" class="form-label">{{ __('Confirm Password') }}</label>
+            <label for="update_password_password_confirmation" class="form-label">{{ __('Sahkan Laluan Baru') }}</label>
             <input id="update_password_password_confirmation" name="password_confirmation" type="password"
                 class="form-control" autocomplete="new-password">
             @if ($errors->updatePassword->has('password_confirmation'))
@@ -40,11 +37,11 @@
         </div>
 
         <div class="d-flex align-items-center gap-3">
-            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+            <button type="submit" class="btn btn-primary">{{ __('Simpan') }}</button>
 
             @if (session('status') === 'password-updated')
                 <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                    class="text-success mb-0">{{ __('Saved.') }}</p>
+                    class="text-success mb-0">{{ __('Berjaya disimpan.') }}</p>
             @endif
         </div>
     </form>

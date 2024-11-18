@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    background-image: url("/images/bg.jpg"); /* Path to your background image */
+    background-size: cover; /* Ensures the image covers the entire screen */
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Makes the background fixed during scrolling */
+    background-color: #f0f0f0; /* Fallback color */
+}
+
 .small-box {
     border-radius: 5px;
     color: #fff;
@@ -67,4 +75,3 @@
 .bg-danger {
     background-color: #dc3545 !important;
 }
-
