@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User; // Import the User model
-use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\StockRequest;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -14,18 +14,20 @@ class DashboardController extends Controller
      * @return \Illuminate\View\View
      */
     public function showDashboard()
-{
-    $userId = auth()->id(); // Get the logged-in user's ID
-    $approvedRequests = StockRequest::with('stock')
-        ->where('user_id', $userId)
-        ->where('status', 'approved')
-        ->get();
+    {
+        $userId = auth()->id(); // Get the logged-in user's ID
 
-    // Pass the variable to the view
-    return view('dashboard', [
-        'approvedRequests' => $approvedRequests,
-        'userCount' => User::count(), // Example additional data
-    ]);
+        // Fetch stock requests that are either 'pending' or 'approved' for the logged-in user
+        $requests = StockRequest::with('stock')
+            ->where('user_id', $userId)
+            ->whereIn('status', ['pending', 'approved'])
+            ->get();
+
+        // Pass the requests and additional data to the view
+        return view('dashboard', [
+            'requests' => $requests,
+            'userCount' => User::count(), // Example additional data
+        ]);
+    }
 }
 
-}

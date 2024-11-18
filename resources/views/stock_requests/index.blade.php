@@ -16,9 +16,6 @@
         @endif
 
         <div class="overflow-x-auto">
-            <div class="mb-4">
-                <a href="{{ route('stock_requests.report') }}" class="btn btn-primary" target="_blank">Generate PDF Report</a>
-            </div>
 
             <table class="table table-zebra w-full">
                 <thead>
@@ -43,7 +40,11 @@
                             <td>
                                 <span
                                     class="badge {{ $request->status === 'pending' ? 'badge-warning' : ($request->status === 'approved' ? 'badge-success' : 'badge-error') }}">
-                                    {{ ucfirst($request->status) }}
+                                    @if ($request->status === 'approved')
+                                        <i class="fas fa-check-circle"></i> <!-- Green checklist icon for approved -->
+                                    @else
+                                        {{ ucfirst($request->status) }}
+                                    @endif
                                 </span>
                             </td>
                             @if (auth()->user()->usertype === 'admin')
@@ -56,6 +57,10 @@
                                             class="btn btn-error btn-sm"
                                             onclick="return confirm('Are you sure you want to reject this request?')">Reject</a>
                                     @endif
+                                    <a href="{{ route('stock_requests.report', ['id' => $request->id]) }}"
+                                        class="btn btn-primary btn-sm">
+                                        <i class="fas fa-file-pdf"></i> Pdf
+                                    </a>
                                 </td>
                             @endif
                         </tr>

@@ -21,7 +21,7 @@
                     @if (auth()->user()->usertype === 'admin')
                         <!-- Check if the user is an admin -->
                         <x-nav-link :href="route('stocks.index')" :active="request()->routeIs('stocks.*')">
-                            {{ __('Manage Stocks') }} <!-- Link to stock management page -->
+                            {{ __('Stok') }} <!-- Link to stock management page -->
                         </x-nav-link>
                     @endif
                 </div>
@@ -29,7 +29,7 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @if (auth()->user()->usertype === 'admin')
                         <x-nav-link :href="route('stock_requests.index')" :active="request()->routeIs('stock_requests.index')">
-                            {{ __('View Stock Applications') }}
+                            {{ __('Permohonan Stok') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -37,14 +37,14 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @if (auth()->user()->usertype === 'applicant')
                         <x-nav-link :href="route('stock_requests.create')" :active="request()->routeIs('stock_requests.create')">
-                            {{ __('Apply for Stock') }}
+                            {{ __('Mohon Stok') }}
                         </x-nav-link>
                     @endif
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('catalog.index')" :active="request()->routeIs('catalog.index')">
-                        {{ __('Catalog') }}
+                        {{ __('Katalog Stok') }}
                     </x-nav-link>
                 </div>
 

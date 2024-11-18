@@ -7,11 +7,21 @@ use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
-    public function index()
-    {
-        $stocks = Stock::all();
-        return view('stocks.index', compact('stocks'));
+    public function index(Request $request)
+{
+    $query = Stock::query();
+
+    // Check if there is a search query
+    if ($request->has('search')) {
+        $query->where('description', 'like', '%' . $request->search . '%')
+              ->orWhere('id', 'like', '%' . $request->search . '%');
     }
+
+    // Get filtered stocks or all stocks if no search query
+    $stocks = $query->get();
+
+    return view('stocks.index', compact('stocks'));
+}
 
     public function create()
     {

@@ -25,30 +25,83 @@
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{ $userCount }}</h3>
+                                <p>User Registrations</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{ $userCount }}</h3>
+                                <p>User Registrations</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{ $userCount }}</h3>
+                                <p>User Registrations</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Approved Stock Requests -->
                 <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg bg-blue-100">
                     <h2 class="text-xl font-semibold mb-8">Status Permohonan</h2>
-                    @if ($approvedRequests->isEmpty())
-                        <p>Tiada permohonan stok yang diluluskan.</p>
+
+                    @if ($requests->isEmpty())
+                        <p>Tiada permohonan stok.</p>
                     @else
                         <table class="table table-zebra w-full">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Perihal Stok</th>
-                                    <th>Kuantiti Diluluskan</th>
-                                    <th>Tarikh Diluluskan</th>
+                                    <th>Kuantiti Diminta / Diluluskan</th>
+                                    <th>Tarikh Permohonan</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($approvedRequests as $request)
+                                @foreach ($requests as $request)
                                     <tr>
                                         <td>{{ $request->id }}</td>
                                         <td>{{ $request->stock->description }}</td>
-                                        <td>{{ $request->approved_quantity }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($request->updated_at)->format('d/m/Y') }}</td>
+                                        <td>
+                                            @if ($request->status === 'pending')
+                                                {{ $request->requested_quantity }} (Pending)
+                                            @else
+                                                {{ $request->approved_quantity }} (Approved)
+                                            @endif
+                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
+                                        <td>
+                                            <span
+                                                class="badge {{ $request->status === 'pending' ? 'badge-warning' : 'badge-success' }}">
+                                                {{ ucfirst($request->status) }}
+                                            </span>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

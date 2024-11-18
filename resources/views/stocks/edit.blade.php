@@ -1,30 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto">
-    <h2 class="text-xl">Edit Stock</h2>
-    
-    <form method="POST" action="{{ route('stocks.update', $stock->id) }}">
-        @csrf
-        @method('PUT') <!-- Method spoofing for PUT -->
-        
-        <div>
-            <label for="description">Stock Description:</label>
-            <input type="text" name="description" id="description" value="{{ $stock->description }}" required>
-        </div>
+    <div class="container mx-auto">
+        <h2 class="text-xl mb-4">Edit Stock</h2>
 
-        <div>
-            <label for="quantity">Quantity:</label>
-            <input type="number" name="quantity" id="quantity" value="{{ $stock->quantity }}" required>
-        </div>
+        <form method="POST" action="{{ route('stocks.update', $stock->id) }}">
+            @csrf
+            @method('PUT') <!-- Method spoofing for PUT -->
 
-        <button type="submit">Update Stock</button>
-    </form>
+            <div class="mb-3">
+                <label for="description" class="form-label">Perihal Stok:</label>
+                <input type="text" name="description" id="description" value="{{ $stock->description }}"
+                    class="form-control" required>
+            </div>
 
-    <form method="POST" action="{{ route('stocks.destroy', $stock->id) }}">
-        @csrf
-        @method('DELETE') <!-- Method spoofing for DELETE -->
-        <button type="submit" onclick="return confirm('Are you sure you want to delete this stock?')">Delete Stock</button>
-    </form>
-</div>
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Kuantiti:</label>
+                <input type="number" name="quantity" id="quantity" value="{{ $stock->quantity }}" class="form-control"
+                    required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Kemaskini Stok</button>
+        </form>
+    </div>
 @endsection

@@ -14,6 +14,7 @@ class StockRequestController extends Controller
     public function index()
     {
         $stockRequests = StockRequest::with('user', 'stock')->get();
+        //dd($stockRequests);
         return view('stock_requests.index', compact('stockRequests'));
     }
 

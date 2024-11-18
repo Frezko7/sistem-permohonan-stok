@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
 
         // Route for viewing all stock requests
         Route::get('/stock-requests', [StockRequestController::class, 'index'])->name('stock_requests.index');
+        
 
         // Show the approval form (GET request)
         Route::get('/stock_requests/{stockRequest}/approve', [StockRequestController::class, 'showApprovalForm'])->name('stock_requests.showApprovalForm');
@@ -51,9 +52,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/stock_requests/{stockRequest}/reject', [StockRequestController::class, 'reject'])->name('stock_requests.reject');
 
         // Generate report
-        Route::get('/stock-requests/report', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
+        Route::get('/stock-requests/{id}/report', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
 
-        Route::get('/stock_requests/user/{userId}', [StockRequestController::class, 'userStockRequests'])->name('stock_requests.userRequests');
+        //Route::get('/stock_requests/user/{userId}', [StockRequestController::class, 'userStockRequests'])->name('stock_requests.userRequests');
 
     });
 
