@@ -111,25 +111,24 @@ class StockRequestController extends Controller
         return redirect()->route('stock_requests.index')->with('success', 'Stock request rejected successfully.');
     }
 
-    public function generateReport($userId)
+    public function generateReport()
 {
-    // Fetch stock requests made by the specific user
-    $stockRequests = StockRequest::with(['stock', 'user'])
-        ->where('user_id', $userId)
-        ->get();
+    // Fetch all stock requests with their related stock and user data
+    $stockRequests = StockRequest::with(['stock', 'user'])->get();
 
-    // Check if the user has made any stock requests
+    // Check if there are any stock requests to generate the report
     if ($stockRequests->isEmpty()) {
-        return redirect()->back()->with('error', 'No stock requests found for the selected user.');
+        return redirect()->back()->with('error', 'No stock requests available to generate a report.');
     }
 
-    // Generate the PDF with stock requests data
+    // Generate the PDF for all stock requests
     $pdf = FacadePdf::loadView('stock_requests.report', [
         'stockRequests' => $stockRequests,
     ])->setPaper('a4', 'landscape');
 
-    // Download the generated PDF
-    return $pdf->download('stock_requests_by_user_' . $userId . '_report.pdf');
+    // Return the generated PDF for download
+    return $pdf->download('all_stock_requests_report.pdf');
 }
+
 
 }

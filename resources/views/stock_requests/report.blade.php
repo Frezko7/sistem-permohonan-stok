@@ -62,7 +62,7 @@
         <tbody>
             @foreach ($stockRequests as $request)
                 <tr>
-                    <td>{{ $request->stock->id }}</td>
+                    <td>{{ $request->stock->stock_id }}</td>
                     <td>{{ $request->stock->description }}</td>
                     <td>{{ $request->requested_quantity }}</td>
                     <td>{{ $request->catatan }}</td>
@@ -73,24 +73,17 @@
                     <td> </td>
                 </tr>
             @endforeach
-        </tbody>
-    </table>
-
-    <br>
-
-    <table>
-        @foreach ($stockRequests as $request)
             <tr>
-                <td class="signature">
+                <td colspan="4">
                     <strong>Pemohon:</strong><br><br>
                     <p>.....................................</p><br>
                     (Tandatangan)
                     <br>
                     Nama: {{ $request->user->name }}<br>
                     Jawatan: {{ $request->user->bahagian_unit }}<br>
-                    Tarikh: {{ $request->created_at }}
+                    Tarikh: {{ $request->created_at->format('d/m/Y') }}
                 </td>
-                <td class="signature">
+                <td colspan="3">
                     <strong>Pegawai Pelulus:</strong><br><br>
                     <p>.....................................</p><br>
                     (Tandatangan)
@@ -99,16 +92,17 @@
                     Jawatan: <br>
                     Tarikh:
                 </td>
-                <td class="signature">
+                <td colspan="2">
                     <strong>Pemohon/Wakil:</strong><br><br>
                     <p>.....................................</p><br>
-                    (Tandatangan)<br>
+                    (Tandatangan)
+                    <br>
                     Nama: <br>
                     Jawatan: <br>
                     Tarikh:
                 </td>
             </tr>
-        @endforeach
+        </tbody>
     </table>
 
     <br>

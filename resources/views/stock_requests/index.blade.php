@@ -23,10 +23,10 @@
                         <th>No.</th>
                         <th>Nama Pemohon</th>
                         <th>Bahagian/Unit</th>
-                        <th>Phone Number</th>
+                        <th>Nombor Telefon</th>
                         <th>Status</th>
                         @if (auth()->user()->usertype === 'admin')
-                            <th>Actions</th>
+                            <th>Pengesahan/Laporan</th>
                         @endif
                     </tr>
                 </thead>
@@ -57,8 +57,7 @@
                                             class="btn btn-danger btn-sm"
                                             onclick="return confirm('Are you sure you want to reject this request?')">Reject</a>
                                     @endif
-                                    <a href="{{ route('stock_requests.report', ['userId' => $request->id]) }}"
-                                        class="btn btn-primary btn-sm">
+                                    <a href="{{ route('stock_requests.report') }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-file-pdf"></i> Pdf
                                     </a>
                                 </td>
