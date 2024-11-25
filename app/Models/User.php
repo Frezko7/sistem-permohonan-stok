@@ -10,6 +10,12 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+
+    public function stockRequests()
+{
+    return $this->hasMany(StockRequest::class, 'user_id');
+}
+
     use HasApiTokens, HasFactory, Notifiable;
 
     /**

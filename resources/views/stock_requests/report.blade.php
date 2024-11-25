@@ -60,11 +60,7 @@
             </tr>
         </thead>
         <tbody>
-
-
-
-            <!-- Loop through your stock requests here -->
-            @foreach ($stockRequest as $request)
+            @foreach ($stockRequests as $request)
                 <tr>
                     <td>{{ $request->stock->id }}</td>
                     <td>{{ $request->stock->description }}</td>
@@ -83,32 +79,36 @@
     <br>
 
     <table>
-        <tr>
-            <td class="signature">
-                <strong>Pemohon:</strong><br><br>
-                <p>.....................................</p><br>
-                (Tandatangan)<br>
-                Nama: {{ $request->user->name }}<br>
-                Jawatan: {{ $request->user->bahagian_unit }}<br>
-                Tarikh: {{ $request->request_date }}
-            </td>
-            <td class="signature">
-                <strong>Pegawai Pelulus:</strong><br><br>
-                <p>.....................................</p><br>
-                (Tandatangan)<br>
-                Nama: <br>
-                Jawatan: <br>
-                Tarikh:
-            </td>
-            <td class="signature">
-                <strong>Pemohon/Wakil:</strong><br><br>
-                <p>.....................................</p><br>
-                (Tandatangan)<br>
-                Nama: <br>
-                Jawatan: <br>
-                Tarikh:
-            </td>
-        </tr>
+        @foreach ($stockRequests as $request)
+            <tr>
+                <td class="signature">
+                    <strong>Pemohon:</strong><br><br>
+                    <p>.....................................</p><br>
+                    (Tandatangan)
+                    <br>
+                    Nama: {{ $request->user->name }}<br>
+                    Jawatan: {{ $request->user->bahagian_unit }}<br>
+                    Tarikh: {{ $request->created_at }}
+                </td>
+                <td class="signature">
+                    <strong>Pegawai Pelulus:</strong><br><br>
+                    <p>.....................................</p><br>
+                    (Tandatangan)
+                    <br>
+                    Nama: <br>
+                    Jawatan: <br>
+                    Tarikh:
+                </td>
+                <td class="signature">
+                    <strong>Pemohon/Wakil:</strong><br><br>
+                    <p>.....................................</p><br>
+                    (Tandatangan)<br>
+                    Nama: <br>
+                    Jawatan: <br>
+                    Tarikh:
+                </td>
+            </tr>
+        @endforeach
     </table>
 
     <br>

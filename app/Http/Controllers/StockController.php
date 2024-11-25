@@ -14,7 +14,7 @@ class StockController extends Controller
     // Check if there is a search query
     if ($request->has('search')) {
         $query->where('description', 'like', '%' . $request->search . '%')
-              ->orWhere('id', 'like', '%' . $request->search . '%');
+              ->orWhere('stock_id', 'like', '%' . $request->search . '%');
     }
 
     // Get filtered stocks or all stocks if no search query
@@ -95,14 +95,16 @@ class StockController extends Controller
         return redirect()->route('stocks.index')->with('success', 'Stock deleted successfully.');
     }
 
-    public function searchStocks(Request $request)
-    {
-        $search = $request->input('search');
-        $stocks = Stock::where('id', 'like', '%' . $search . '%')
-            ->orWhere('description', 'like', '%' . $search . '%')
-            ->take(5) // Limit results for performance
-            ->get();
+    public function search(Request $request)
+{
+    $query = $request->input('query'); // Get the search query from the input
 
-        return response()->json($stocks);
-    }
+    // Search for stock items by description or stock ID
+    $stocks = Stock::where('description', 'LIKE', "%{$query}%")
+                   ->orWhere('stock_id', 'LIKE', "%{$query}%")
+                   ->get();
+
+    // Return the view with the search results
+    return view('catalog.index', compact('stocks', 'query'));
+}
 }

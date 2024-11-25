@@ -4,7 +4,7 @@
     <div class="container mx-auto">
         <h2 class="text-xl mb-4">Edit Stock</h2>
 
-        <form method="POST" action="{{ route('stocks.update', $stock->id) }}">
+        <form method="POST" action="{{ route('stocks.update', $stock->stock_id) }}">
             @csrf
             @method('PUT') <!-- Method spoofing for PUT -->
 

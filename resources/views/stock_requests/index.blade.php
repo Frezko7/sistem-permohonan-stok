@@ -17,7 +17,7 @@
 
         <div class="overflow-x-auto">
 
-            <table class="table table-zebra w-full">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -41,7 +41,7 @@
                                 <span
                                     class="badge {{ $request->status === 'pending' ? 'badge-warning' : ($request->status === 'approved' ? 'badge-success' : 'badge-error') }}">
                                     @if ($request->status === 'approved')
-                                        <i class="fas fa-check-circle"></i> <!-- Green checklist icon for approved -->
+                                        <i class="fas fa-check-circle"></i>
                                     @else
                                         {{ ucfirst($request->status) }}
                                     @endif
@@ -54,10 +54,10 @@
                                             class="btn btn-success btn-sm"
                                             onclick="return confirm('Are you sure you want to approve this request?')">Approve</a>
                                         <a href="{{ route('stock_requests.reject', $request) }}"
-                                            class="btn btn-error btn-sm"
+                                            class="btn btn-danger btn-sm"
                                             onclick="return confirm('Are you sure you want to reject this request?')">Reject</a>
                                     @endif
-                                    <a href="{{ route('stock_requests.report', ['id' => $request->id]) }}"
+                                    <a href="{{ route('stock_requests.report', ['userId' => $request->id]) }}"
                                         class="btn btn-primary btn-sm">
                                         <i class="fas fa-file-pdf"></i> Pdf
                                     </a>

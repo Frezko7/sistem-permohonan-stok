@@ -14,11 +14,11 @@ class CatalogController extends Controller
         return view('catalog.index', compact('stocks'));
     }
 
-    public function show($id)
+    public function show($stock_id)
    {
-    $stock = Stock::findOrFail($id);
+    $stock = Stock::findOrFail($stock_id);
 
-    return view('catalog.show', compact('stocks'));
+    return view('catalog.show', compact('stock'));
    }
 
 }

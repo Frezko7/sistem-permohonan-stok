@@ -12,10 +12,9 @@ class StockRequest extends Model
     protected $fillable = ['user_id', 'stock_id', 'requested_quantity', 'status','catatan'];
 
     public function stock()
-    {
-        return $this->belongsTo(Stock::class);
-    }
-
+{
+    return $this->belongsTo(Stock::class, 'stock_id');
+}
     public function user()
     {
         return $this->belongsTo(User::class);

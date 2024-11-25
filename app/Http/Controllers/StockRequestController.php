@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Stock;
 use App\Models\StockRequest;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade as PDF;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,8 +12,8 @@ class StockRequestController extends Controller
 {
     public function index()
     {
+        // Use 'stock' instead of 'stock_id' to match the relationship method in the model
         $stockRequests = StockRequest::with('user', 'stock')->get();
-        //dd($stockRequests);
         return view('stock_requests.index', compact('stockRequests'));
     }
 
@@ -28,7 +27,7 @@ class StockRequestController extends Controller
     {
         $validatedData = $request->validate([
             'stock_ids' => 'required|array',
-            'stock_ids.*' => 'exists:stocks,id',
+            'stock_ids.*' => 'exists:stocks,stock_id', // Make sure the foreign key is correct
             'requested_quantities' => 'required|array',
             'requested_quantities.*' => 'integer|min:1',
         ]);
@@ -50,10 +49,10 @@ class StockRequestController extends Controller
 
     public function showApprovalForm($id)
     {
-    $stockRequest = StockRequest::with('stock', 'user')->findOrFail($id);
-    $userStockRequests = StockRequest::with('stock')->where('user_id', $stockRequest->user_id)->get();
+        $stockRequest = StockRequest::with('stock', 'user')->findOrFail($id);
+        $userStockRequests = StockRequest::with('stock')->where('user_id', $stockRequest->user_id)->get();
 
-    return view('stock_requests.approve', compact('stockRequest', 'userStockRequests'));
+        return view('stock_requests.approve', compact('stockRequest', 'userStockRequests'));
     }
 
     public function approve(Request $request, $id)
@@ -77,31 +76,31 @@ class StockRequestController extends Controller
     }
 
     public function approveAll(Request $request)
-{
-    $approvedQuantities = $request->input('approved_quantities'); // This should be an array
+    {
+        $approvedQuantities = $request->input('approved_quantities'); // This should be an array
 
-    foreach ($approvedQuantities as $requestId => $approvedQuantity) {
-        $stockRequest = StockRequest::findOrFail($requestId);
+        foreach ($approvedQuantities as $requestId => $approvedQuantity) {
+            $stockRequest = StockRequest::findOrFail($requestId);
 
-        // Skip already approved stock requests
-        if ($stockRequest->status === 'approved') {
-            continue; // Move to the next iteration
+            // Skip already approved stock requests
+            if ($stockRequest->status === 'approved') {
+                continue; // Move to the next iteration
+            }
+
+            // Ensure the approved quantity is valid
+            if ($approvedQuantity <= $stockRequest->requested_quantity) {
+                $stockRequest->approved_quantity = $approvedQuantity;
+                $stockRequest->status = 'approved';
+                $stockRequest->save();
+
+                // Update stock quantity if needed
+                $stock = Stock::findOrFail($stockRequest->stock_id);
+                $stock->decreaseQuantity($approvedQuantity); // Ensure this method exists in the Stock model
+            }
         }
 
-        // Ensure the approved quantity is valid
-        if ($approvedQuantity <= $stockRequest->requested_quantity) {
-            $stockRequest->approved_quantity = $approvedQuantity;
-            $stockRequest->status = 'approved';
-            $stockRequest->save();
-
-            // Update stock quantity if needed
-            $stock = Stock::findOrFail($stockRequest->stock_id);
-            $stock->decreaseQuantity($approvedQuantity); // Ensure this method exists in the Stock model
-        }
+        return redirect()->route('stock_requests.index')->with('success', 'All pending stock requests have been approved.');
     }
-
-    return redirect()->route('stock_requests.index')->with('success', 'All pending stock requests have been approved.');
-}
 
     public function reject($id)
     {
@@ -112,18 +111,25 @@ class StockRequestController extends Controller
         return redirect()->route('stock_requests.index')->with('success', 'Stock request rejected successfully.');
     }
 
-    public function generateReport($id)
-    {
-        
-        // Fetch the specific stock request by ID with its relationships
-        $stockRequest = StockRequest::with(['stock', 'user'])->findOrFail($id);
+    public function generateReport($userId)
+{
+    // Fetch stock requests made by the specific user
+    $stockRequests = StockRequest::with(['stock', 'user'])
+        ->where('user_id', $userId)
+        ->get();
 
-        // Generate the PDF for the specific stock request
-        $pdf = FacadePdf::loadView('stock_requests.report', [
-            'stockRequest' => $stockRequest,
-        ])->setPaper('a4', 'landscape');
-
-        // Return the generated PDF for download
-        return $pdf->download('stock_request_' . $stockRequest->id . '_report.pdf');
+    // Check if the user has made any stock requests
+    if ($stockRequests->isEmpty()) {
+        return redirect()->back()->with('error', 'No stock requests found for the selected user.');
     }
+
+    // Generate the PDF with stock requests data
+    $pdf = FacadePdf::loadView('stock_requests.report', [
+        'stockRequests' => $stockRequests,
+    ])->setPaper('a4', 'landscape');
+
+    // Download the generated PDF
+    return $pdf->download('stock_requests_by_user_' . $userId . '_report.pdf');
+}
+
 }

@@ -38,7 +38,7 @@
                             @if ($request->status === 'pending')
                                 <tr>
                                     <td>{{ $request->id }}</td>
-                                    <td>{{ $request->stock->id }}</td>
+                                    <td>{{ $request->stock_id }}</td>
                                     <td>{{ $request->stock->description }}</td>
                                     <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
                                     <td>{{ $request->requested_quantity }}</td>

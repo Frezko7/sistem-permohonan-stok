@@ -31,6 +31,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/stock/{id}', [CatalogController::class, 'show'])->name('stock.show');
 
+    // Search for stocks
+    Route::get('/catalog/search', [StockController::class, 'search'])->name('catalog.search');
+
 
     // Admin routes
     Route::middleware('usertype:admin')->group(function () {
@@ -63,8 +66,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('stock_requests', StockRequestController::class)->only(['create', 'store']); // Applicants can create and view requests
     });
 
-    // Search for stocks
-    Route::get('/stocks/search', [StockController::class, 'searchStocks'])->name('stocks.search');
 });
 
 // Include the authentication routes

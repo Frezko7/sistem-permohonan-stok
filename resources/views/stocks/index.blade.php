@@ -26,18 +26,18 @@
                 <tbody>
                     @foreach ($stocks as $stock)
                         <tr>
-                            <td class="border">{{ $stock->id }}</td>
+                            <td class="border">{{ $stock->stock_id }}</td>
                             <td class="border">{{ $stock->description }}</td>
                             <td class="border">{{ $stock->quantity }}</td>
                             @if (auth()->user()->usertype === 'admin')
                                 <td class="border">
                                     <!-- Edit Button with Icon -->
-                                    <a href="{{ route('stocks.edit', $stock->id) }}" class="btn btn-warning btn-sm">
+                                    <a href="{{ route('stocks.edit', $stock->stock_id) }}" class="btn btn-warning btn-sm">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
 
                                     <!-- Delete Button with Icon -->
-                                    <form action="{{ route('stocks.destroy', $stock->id) }}" method="POST"
+                                    <form action="{{ route('stocks.destroy', $stock->stock_id) }}" method="POST"
                                         class="inline-block">
                                         @csrf
                                         @method('DELETE')
