@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
     // Search for stocks
     Route::get('/catalog/search', [StockController::class, 'search'])->name('catalog.search');
 
+    Route::get('/stocks/search', [StockController::class, 'search'])->name('stocks.search');
+
 
     // Admin routes
     Route::middleware('usertype:admin')->group(function () {
@@ -58,6 +60,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/stock-requests/report', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
         
         //Route::get('/stock_requests/user/{userId}', [StockRequestController::class, 'userStockRequests'])->name('stock_requests.userRequests');
+
+        Route::delete('/stock-requests/{id}', [StockRequestController::class, 'destroy'])->name('stock_requests.destroy');
 
     });
 

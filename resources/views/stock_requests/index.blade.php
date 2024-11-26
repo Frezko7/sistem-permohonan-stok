@@ -60,6 +60,19 @@
                                     <a href="{{ route('stock_requests.report') }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-file-pdf"></i> Pdf
                                     </a>
+
+                                    {{-- Delete Button --}}
+                                    @if ($request->status === 'approved')
+                                        <form action="{{ route('stock_requests.destroy', $request) }}" method="POST"
+                                            class="d-inline"
+                                            onsubmit="return confirm('Are you sure you want to delete this request?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             @endif
                         </tr>

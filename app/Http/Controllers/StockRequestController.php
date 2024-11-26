@@ -130,5 +130,25 @@ class StockRequestController extends Controller
     return $pdf->download('all_stock_requests_report.pdf');
 }
 
+public function destroy($id)
+{
+    // Find the stock request by ID
+    $stockRequest = StockRequest::find($id);
+
+    if (!$stockRequest) {
+        return redirect()->back()->withErrors('Stock request not found.');
+    }
+
+    // Check if the stock request has been approved
+    if ($stockRequest->status !== 'approved') {
+        return redirect()->back()->withErrors('Only approved stock requests can be deleted.');
+    }
+
+    // Delete the stock request
+    $stockRequest->delete();
+
+    return redirect()->route('stock_requests.index')->with('success', 'Stock request deleted successfully.');
+}
+
 
 }

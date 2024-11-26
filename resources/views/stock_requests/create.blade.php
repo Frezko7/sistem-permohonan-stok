@@ -2,7 +2,7 @@
 
 @section('header')
     <h1 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Request Stock') }}
+        {{ __('Mohon Stok') }}
     </h1>
 @endsection
 
@@ -30,19 +30,19 @@
 
             <!-- Display User Info (Name, Bahagian, Phone Number) -->
             <div class="mb-4">
-                <label for="user_name" class="label"><span class="label-text">Name</span></label>
+                <label for="user_name" class="label"><span class="label-text">Nama:</span></label>
                 <input type="text" class="input input-bordered w-full" id="user_name" name="user_name"
                     value="{{ Auth::user()->name }}" readonly>
             </div>
 
             <div class="mb-4">
-                <label for="bahagian_unit" class="label"><span class="label-text">Bahagian/Unit</span></label>
+                <label for="bahagian_unit" class="label"><span class="label-text">Bahagian/Unit:</span></label>
                 <input type="text" class="input input-bordered w-full" id="bahagian_unit" name="bahagian_unit"
                     value="{{ Auth::user()->bahagian_unit }}" readonly>
             </div>
 
             <div class="mb-4">
-                <label for="phone_number" class="label"><span class="label-text">Phone Number</span></label>
+                <label for="phone_number" class="label"><span class="label-text">No. Telefon:</span></label>
                 <input type="text" class="input input-bordered w-full" id="phone_number" name="phone_number"
                     value="{{ Auth::user()->phone_number }}" readonly>
             </div>
@@ -50,21 +50,21 @@
             <!-- Stock Items Section (Dynamic) -->
             <div id="stock-items">
                 <div class="stock-item mb-4">
-                    <label for="stock_id[]" class="label"><span class="label-text">Enter Stock ID</span></label>
+                    <label for="stock_id[]" class="label"><span class="label-text">No. Kod Stok:</span></label>
                     <input type="text" class="input input-bordered w-full stock-id" name="stock_ids[]"
-                        placeholder="Enter stock ID" autocomplete="off" required>
+                        placeholder="Masukkan kod stok" autocomplete="off" required>
 
                     <ul class="stock-suggestions list-group position-absolute w-full bg-base-100 shadow-lg"
                         style="z-index: 1000; display: none;"></ul>
 
-                    <label for="requested_quantity[]" class="label"><span class="label-text">Requested
-                            Quantity</span></label>
+                    <label for="requested_quantity[]" class="label"><span class="label-text">Kuantiti
+                            Dimohon:</span></label>
                     <input type="number" class="input input-bordered w-full" name="requested_quantities[]"
-                        placeholder="Quantity" required>
+                        placeholder="Kuantit stok" required>
                 </div>
             </div>
 
-            <button type="button" id="add-stock-item" class="btn btn-secondary mt-4">Add More Items</button>
+            <button type="button" id="add-stock-item" class="btn btn-secondary mt-4">Tambah Stok Lain</button>
 
             <!-- Catatan (Notes) -->
             <div class="mb-4">
@@ -72,7 +72,7 @@
                 <textarea class="textarea textarea-bordered w-full" id="catatan" name="catatan" rows="3"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit Request</button>
+            <button type="submit" class="btn btn-primary">Hantar</button>
         </form>
     </div>
 

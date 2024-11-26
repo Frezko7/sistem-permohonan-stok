@@ -12,11 +12,11 @@
         <form action="{{ route('catalog.search') }}" method="GET" class="mb-4">
             <div class="row">
                 <div class="col-md-4">
-                    <input type="text" name="query" class="form-control"
-                        placeholder="Search by Stock Description or Stock ID" value="{{ request('query') }}" required>
+                    <input type="text" name="query" class="form-control" placeholder="Cari no.kod atau perihal stok"
+                        value="{{ request('query') }}" required>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                    <button type="submit" class="btn btn-primary w-100">Cari</button>
                 </div>
             </div>
         </form>
@@ -30,14 +30,14 @@
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">{{ $stock->description }}</h5>
                             <p class="card-text">No. Kod: {{ $stock->stock_id }}</p>
-                            <a href="{{ route('stock.show', $stock->stock_id) }}" class="btn btn-primary mt-auto">View
-                                Details</a>
+                            <a href="{{ route('stock.show', $stock->stock_id) }}" class="btn btn-primary mt-auto">Lihat
+                                Butiran</a>
                         </div>
                     </div>
                 </div>
             @empty
                 <div class="col-12">
-                    <p class="text-center">No results found for "{{ request('query') }}"</p>
+                    <p class="text-center">Pencarian tidak ditemui "{{ request('query') }}"</p>
                 </div>
             @endforelse
         </div>
