@@ -26,7 +26,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="image" class="form-label">Gambar Stok:</label>
-                    <input type="file" name="image" id="image" class="form-input" accept="image/*" required>
+                    <input type="file" name="image" id="image" class="form-input" accept="image/*">
                 </div>
                 <button type="submit" class="btn btn-success">Tambah Stok</button>
             </form>

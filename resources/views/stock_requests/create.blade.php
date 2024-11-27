@@ -60,7 +60,7 @@
                     <label for="requested_quantity[]" class="label"><span class="label-text">Kuantiti
                             Dimohon:</span></label>
                     <input type="number" class="input input-bordered w-full" name="requested_quantities[]"
-                        placeholder="Kuantit stok" required>
+                        placeholder="Kuantiti stok" required>
                 </div>
             </div>
 
