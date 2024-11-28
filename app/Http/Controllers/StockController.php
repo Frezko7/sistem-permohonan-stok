@@ -99,10 +99,18 @@ class StockController extends Controller
 {
     $query = $request->input('query'); // Get the search query from the input
 
-    // Search for stock items by description or stock ID
-    $stocks = Stock::where('description', 'LIKE', "%{$query}%")
-                   ->orWhere('stock_id', 'LIKE', "%{$query}%")
-                   ->get();
+    // Ensure the query is not empty
+    if (empty($query)) {
+        return redirect()->back()->with('error', 'Please enter a search term.');
+    }
+
+    // Search for stock items by exact or partial description or stock ID
+    $stocks = Stock::where(function ($q) use ($query) {
+                        $q->where('description', '=', $query) // Exact match on description
+                          ->orWhere('stock_id', '=', $query) // Exact match on stock ID
+                          ->orWhere('description', 'LIKE', "%{$query}%"); // Partial match on description
+                    })
+                    ->get();
 
     // Return the view with the search results
     return view('catalog.index', compact('stocks', 'query'));
