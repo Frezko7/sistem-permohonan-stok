@@ -57,7 +57,8 @@
                                             class="btn btn-danger btn-sm"
                                             onclick="return confirm('Are you sure you want to reject this request?')">Reject</a>
                                     @endif
-                                    <a href="{{ route('stock_requests.report') }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('stock_requests.report', ['userId' => $request->user->id]) }}"
+                                        class="btn btn-primary btn-sm">
                                         <i class="fas fa-file-pdf"></i> Pdf
                                     </a>
 

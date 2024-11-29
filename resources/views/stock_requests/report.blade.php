@@ -79,9 +79,9 @@
                     <p>.....................................</p><br>
                     (Tandatangan)
                     <br>
-                    Nama: {{ $request->user->name }}<br>
-                    Jawatan: {{ $request->user->bahagian_unit }}<br>
-                    Tarikh: {{ $request->created_at->format('d/m/Y') }}
+                    Nama: {{ $user->name }}<br>
+                    Jawatan: {{ $user->bahagian_unit }}<br>
+                    Tarikh: {{ now()->format('d/m/Y') }}
                 </td>
                 <td colspan="3">
                     <strong>Pegawai Pelulus:</strong><br><br>

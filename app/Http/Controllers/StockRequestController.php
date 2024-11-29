@@ -6,7 +6,7 @@ use App\Models\Stock;
 use App\Models\StockRequest;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class StockRequestController extends Controller
 {
@@ -111,23 +111,29 @@ class StockRequestController extends Controller
         return redirect()->route('stock_requests.index')->with('success', 'Stock request rejected successfully.');
     }
 
-    public function generateReport()
+    public function generateReport($userId)
 {
-    // Fetch all stock requests with their related stock and user data
-    $stockRequests = StockRequest::with(['stock', 'user'])->get();
+    // Fetch the user by ID with the stock requests and related stock data
+    $user = User::with('stockRequests.stock')->find($userId);
 
-    // Check if there are any stock requests to generate the report
-    if ($stockRequests->isEmpty()) {
-        return redirect()->back()->with('error', 'No stock requests available to generate a report.');
+    // Check if user exists
+    if (!$user) {
+        return redirect()->back()->with('error', 'User not found.');
     }
 
-    // Generate the PDF for all stock requests
+    // Check if the user has stock requests
+    if ($user->stockRequests->isEmpty()) {
+        return redirect()->back()->with('error', 'No stock requests available for this user.');
+    }
+
+    // Generate the PDF with the user and stock requests data
     $pdf = FacadePdf::loadView('stock_requests.report', [
-        'stockRequests' => $stockRequests,
+        'stockRequests' => $user->stockRequests,
+        'user' => $user,
     ])->setPaper('a4', 'landscape');
 
     // Return the generated PDF for download
-    return $pdf->download('all_stock_requests_report.pdf');
+    return $pdf->download('user_stock_requests_report.pdf');
 }
 
 public function destroy($id)
