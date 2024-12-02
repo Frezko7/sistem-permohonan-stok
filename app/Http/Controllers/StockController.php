@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Stock;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class StockController extends Controller
 {
@@ -65,26 +66,38 @@ class StockController extends Controller
 
     // Update stock
     public function update(Request $request, $id)
-{
-    // Validate input data
-    $request->validate([
-        'description' => 'required|string|max:255',
-        'quantity' => 'required|integer|min:1', // Ensure the quantity is at least 1
-    ]);
-
-    // Find the stock by ID
-    $stock = Stock::findOrFail($id);
-
-    // Update the stock with validated data
-    $stock->description = $request->input('description');
-    $stock->quantity = $request->input('quantity');
-
-    // Save the changes to the stock
-    $stock->save();
-
-    // Redirect with success message
-    return redirect()->route('stocks.index')->with('success', 'Stock updated successfully.');
-}
+    {
+        // Validate the input data, including image (optional)
+        $validatedData = $request->validate([
+            'description' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image is now optional
+        ]);
+    
+        // Find the stock by ID
+        $stock = Stock::findOrFail($id);
+    
+        // Update the stock details
+        $stock->description = $validatedData['description'];
+        $stock->quantity = $validatedData['quantity'];
+    
+        // Handle image upload if a new image is uploaded
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($stock->image) {
+                Storage::delete('public/' . $stock->image); // Ensure 'public/' is included in the old image path
+            }
+    
+            // Store the new image in the 'public/images' directory
+            $stock->image = $request->file('image')->store('images', 'public');
+        }
+    
+        // Save the updated stock
+        $stock->save();
+    
+        // Redirect with success message
+        return redirect()->route('stocks.index')->with('success', 'Stock updated successfully!');
+    }    
 
     // Delete stock
     public function destroy($id)
