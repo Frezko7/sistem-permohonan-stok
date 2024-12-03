@@ -33,7 +33,7 @@
 
         <!-- Add background class here -->
         <div class="min-h-screen bg-cover bg-center"
-            style="background-image: url('{{ asset('path/to/your/background.jpg') }}');">
+            style="background-image: url('{{ asset('public/images/bg.jpg') }}');">
             @yield('content') <!-- Content section -->
         </div>
     </main>

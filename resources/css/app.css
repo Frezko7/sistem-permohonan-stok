@@ -3,11 +3,10 @@
 @tailwind utilities;
 
 body {
-    background-image: url("/images/bg.jpg"); /* Path to your background image */
     background-size: cover; /* Ensures the image covers the entire screen */
     background-repeat: no-repeat;
     background-attachment: fixed; /* Makes the background fixed during scrolling */
-    background-color: #f0f0f0; /* Fallback color */
+    background-color: #000000; /* Fallback color */
 }
 
 .small-box {
