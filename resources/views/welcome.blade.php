@@ -53,7 +53,7 @@
             text-decoration: underline dotted
         }
 
-        h1,
+
         h2,
         h3,
         h4,
@@ -174,7 +174,6 @@
         dd,
         dl,
         figure,
-        h1,
         h2,
         h3,
         h4,
@@ -820,6 +819,35 @@
                 padding: 2rem
             }
         }
+
+        .image-container img {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .image-container img:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .image-container img:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .image-container img:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .image-container img:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -834,11 +862,12 @@
                 @else
                     <a href="{{ route('login') }}"
                         class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log
-                        in</a>
+                        Masuk
+                    </a>
 
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}"
-                            class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
+                            class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Daftar</a>
                     @endif
                 @endauth
             </div>
@@ -850,26 +879,26 @@
                 <img src="{{ asset('images/jata-without-bg.gif') }}" alt="Logo" style="width: 120px; height: auto;">
             </div>
 
-            <h1 class="text-center text-6xl md:text-7xl font-bold text-gray-800">
-                Sistem Pengurusan Aset
+            <h1 class="text-center text-5xl md:text-7xl font-bold text-gray-800">
+                Sistem Pengurusan Stor
             </h1>
 
             <div class="mt-16">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 image-container">
                     <div>
-                        <img src="{{ asset('images/pejabat.png') }}">
+                        <img src="{{ asset('images/pejabat.png') }}" style="width: 360px; height: auto;">
                     </div>
 
                     <div>
-                        <img src="{{ asset('images/IMG_1623.jpg') }}">
+                        <img src="{{ asset('images/IMG_1623.jpg') }}" style="width: 360px; height: auto;">
                     </div>
 
                     <div>
-                        <img src="{{ asset('images/IMG_1632.jpg') }}">
+                        <img src="{{ asset('images/IMG_1632.jpg') }}" style="width: 360px; height: auto;">
                     </div>
 
                     <div>
-                        <img src="{{ asset('images/IMG_5303.jpg') }}">
+                        <img src="{{ asset('images/IMG_5303.jpg') }}" style="width: 360px; height: auto;">
                     </div>
                 </div>
             </div>
@@ -880,7 +909,7 @@
                 </div>
 
                 <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
-                    Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+                    <p>Hak Cipta © {{ date('Y') }} - Pejabat Daerah Tanah Hulu Selangor</p>
                 </div>
             </div>
         </div>
