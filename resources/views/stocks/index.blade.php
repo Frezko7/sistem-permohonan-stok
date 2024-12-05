@@ -1,8 +1,13 @@
 @extends('layouts.app')
 
+@section('header')
+    <h2 class="text-center font-semibold text-xl text-gray-800 leading-tight">
+        {{ __(' Stok') }}
+    </h2>
+@endsection
+
 @section('content')
     <div class="container mx-auto py-6">
-        <h1 class="text-3xl font-bold mb-6">Stok</h1>
         <a href="{{ route('stocks.create') }}" class="btn btn-primary mb-4">Tambah Stok Baru</a>
 
         @if (session('success'))

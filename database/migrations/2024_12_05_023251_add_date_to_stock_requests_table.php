@@ -6,21 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
 {
     Schema::table('stock_requests', function (Blueprint $table) {
-        $table->dropColumn(['items', 'date']);
+        $table->date('date')->nullable(); // Adds a nullable date column
     });
 }
 
 public function down()
 {
     Schema::table('stock_requests', function (Blueprint $table) {
-        $table->string('items')->nullable();
-        $table->date('date')->nullable();
+        $table->dropColumn('date');
     });
 }
 

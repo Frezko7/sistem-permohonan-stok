@@ -24,28 +24,30 @@ class StockRequestController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'stock_ids' => 'required|array',
-            'stock_ids.*' => 'exists:stocks,stock_id', // Make sure the foreign key is correct
-            'requested_quantities' => 'required|array',
-            'requested_quantities.*' => 'integer|min:1',
+{
+    $validatedData = $request->validate([
+        'stock_ids' => 'required|array',
+        'stock_ids.*' => 'exists:stocks,stock_id', // Validate each stock_id exists in the stocks table
+        'requested_quantities' => 'required|array',
+        'requested_quantities.*' => 'integer|min:1', // Ensure valid quantities
+        'date' => 'nullable|date', // Validate the date field
+    ]);
+
+    foreach ($request->stock_ids as $index => $stockId) {
+        $requestedQuantity = $request->requested_quantities[$index];
+
+        StockRequest::create([
+            'user_id' => auth()->id(),
+            'stock_id' => $stockId,
+            'requested_quantity' => $requestedQuantity,
+            'status' => 'pending',
+            'catatan' => $request->input('catatan') ?? null,
+            'date' => $request->input('date') ?? now()->toDateString(), // Use the provided date or default to today
         ]);
-
-        foreach ($request->stock_ids as $index => $stockId) {
-            $requestedQuantity = $request->requested_quantities[$index];
-
-            StockRequest::create([
-                'user_id' => auth()->id(),
-                'stock_id' => $stockId,
-                'requested_quantity' => $requestedQuantity,
-                'status' => 'pending',
-                'catatan' => $request->input('catatan') ?? null,
-            ]);
-        }
-
-        return redirect()->route('stock_requests.create')->with('success', 'Stock request submitted successfully!');
     }
+
+    return redirect()->route('stock_requests.create')->with('success', 'Stock request submitted successfully!');
+}
 
     public function showApprovalForm($id)
     {
