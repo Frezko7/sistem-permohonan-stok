@@ -64,7 +64,9 @@
                 </div>
             </div>
 
-            <button type="button" id="add-stock-item" class="btn btn-secondary mt-4">Tambah Stok Lain</button>
+            <div class="d-flex justify-content-end mt-4">
+                <button type="button" id="add-stock-item" class="btn btn-secondary">Tambah Stok Lain</button>
+            </div>
 
             <!-- Single Date Field -->
             <label for="date" class="label"><span class="label-text">Tarikh:</span></label>
