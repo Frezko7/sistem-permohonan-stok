@@ -12,7 +12,6 @@ class StockRequestController extends Controller
 {
     public function index()
     {
-        // Use 'stock' instead of 'stock_id' to match the relationship method in the model
         $stockRequests = StockRequest::with('user', 'stock')->get();
         return view('stock_requests.index', compact('stockRequests'));
     }
