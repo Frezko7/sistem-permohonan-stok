@@ -78,16 +78,9 @@
                             <tbody>
                                 @foreach ($requests as $request)
                                     <tr>
-                                        <td>{{ $request->id }}</td>
+                                        <td>{{ $request->group_id }}</td>
                                         <td>{{ $request->stock->description }}</td>
-                                        <td>
-                                            @if ($request->status === 'pending')
-                                                {{ $request->requested_quantity }} (Pending)
-                                            @else
-                                                {{ $request->approved_quantity }} (Approved)
-                                            @endif
-                                        </td>
-                                        <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
+                                        <td>{{ $request->date }}</td>
                                         <td>
                                             <span
                                                 class="badge {{ $request->status === 'pending' ? 'badge-warning' : 'badge-success' }}">

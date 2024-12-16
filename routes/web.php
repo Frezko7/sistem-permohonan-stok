@@ -36,6 +36,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/stocks/search', [StockController::class, 'search'])->name('stocks.search');
 
+    Route::get('/stock-suggestions', [StockController::class, 'getSuggestions'])->name('stock.suggestions');
+
 
     // Admin routes
     Route::middleware('usertype:admin')->group(function () {

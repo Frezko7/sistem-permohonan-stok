@@ -16,8 +16,9 @@ class Stock extends Model
         $this->save();
     }
     public function stockRequests()
-{
-    return $this->hasMany(StockRequest::class, 'stock_id');
-}
+    {
+        return $this->hasMany(StockRequest::class, 'stock_id', 'stock_id');
+    }
+    
 
 }

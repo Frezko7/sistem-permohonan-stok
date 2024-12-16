@@ -24,30 +24,32 @@ class StockRequestController extends Controller
 
     public function store(Request $request)
 {
-    $validatedData = $request->validate([
-        'stock_ids' => 'required|array',
-        'stock_ids.*' => 'exists:stocks,stock_id', // Validate each stock_id exists in the stocks table
-        'requested_quantities' => 'required|array',
-        'requested_quantities.*' => 'integer|min:1', // Ensure valid quantities
-        'date' => 'nullable|date', // Validate the date field
+    // Validate the request data
+    $request->validate([
+        'stock_ids' => 'required|array|min:1',
+        'stock_ids.*' => 'required|string', // Ensure stock_id is provided for each item
+        'requested_quantities' => 'required|array|min:1',
+        'requested_quantities.*' => 'required|integer|min:1',
+        'date' => 'required|date',
+        'catatan' => 'nullable|string',
     ]);
 
-    foreach ($request->stock_ids as $index => $stockId) {
-        $requestedQuantity = $request->requested_quantities[$index];
-
+    // Loop through each stock_id and create a stock request for each
+    foreach ($request->stock_ids as $index => $stock_id) {
         StockRequest::create([
             'user_id' => auth()->id(),
-            'stock_id' => $stockId,
-            'requested_quantity' => $requestedQuantity,
-            'status' => 'pending',
-            'catatan' => $request->input('catatan') ?? null,
-            'date' => $request->input('date') ?? now()->toDateString(), // Use the provided date or default to today
+            'stock_id' => $stock_id,  // User-defined stock_id
+            'requested_quantity' => $request->requested_quantities[$index],
+            'status' => 'pending',  // Default status is pending
+            'catatan' => $request->catatan,
+            'date' => $request->date,
         ]);
     }
 
-    return redirect()->route('stock_requests.create')->with('success', 'Stock request submitted successfully!');
+    // Redirect back with a success message
+    return redirect()->route('stock_requests.create')->with('success', 'Stock request submitted successfully.');
 }
-
+    
     public function showApprovalForm($id)
     {
         $stockRequest = StockRequest::with('stock', 'user')->findOrFail($id);
@@ -70,7 +72,7 @@ class StockRequestController extends Controller
         $stockRequest->status = 'approved';
         $stockRequest->save();
 
-        $stock = Stock::findOrFail($stockRequest->stock_id);
+        $stock = Stock::where('stock_id', $stockRequest->stock_id)->firstOrFail();
         $stock->decreaseQuantity($approvedQuantity); // Ensure this method exists in the Stock model
 
         return redirect()->route('stock_requests.index')->with('success', 'Stock request approved and stock quantity updated successfully.');
@@ -83,19 +85,16 @@ class StockRequestController extends Controller
         foreach ($approvedQuantities as $requestId => $approvedQuantity) {
             $stockRequest = StockRequest::findOrFail($requestId);
 
-            // Skip already approved stock requests
             if ($stockRequest->status === 'approved') {
-                continue; // Move to the next iteration
+                continue; // Skip already approved stock requests
             }
 
-            // Ensure the approved quantity is valid
             if ($approvedQuantity <= $stockRequest->requested_quantity) {
                 $stockRequest->approved_quantity = $approvedQuantity;
                 $stockRequest->status = 'approved';
                 $stockRequest->save();
 
-                // Update stock quantity if needed
-                $stock = Stock::findOrFail($stockRequest->stock_id);
+                $stock = Stock::where('stock_id', $stockRequest->stock_id)->firstOrFail();
                 $stock->decreaseQuantity($approvedQuantity); // Ensure this method exists in the Stock model
             }
         }
@@ -106,56 +105,42 @@ class StockRequestController extends Controller
     public function reject($id)
     {
         $stockRequest = StockRequest::findOrFail($id);
-        $stockRequest->status = 'rejected'; // Set the status as rejected
+        $stockRequest->status = 'rejected';
         $stockRequest->save();
 
         return redirect()->route('stock_requests.index')->with('success', 'Stock request rejected successfully.');
     }
 
     public function generateReport($userId)
-{
-    // Fetch the user by ID with the stock requests and related stock data
-    $user = User::with('stockRequests.stock')->find($userId);
+    {
+        $user = User::with('stockRequests.stock')->find($userId);
 
-    // Check if user exists
-    if (!$user) {
-        return redirect()->back()->with('error', 'User not found.');
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found.');
+        }
+
+        if ($user->stockRequests->isEmpty()) {
+            return redirect()->back()->with('error', 'No stock requests available for this user.');
+        }
+
+        $pdf = FacadePdf::loadView('stock_requests.report', [
+            'stockRequests' => $user->stockRequests,
+            'user' => $user,
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->download('user_stock_requests_report.pdf');
     }
 
-    // Check if the user has stock requests
-    if ($user->stockRequests->isEmpty()) {
-        return redirect()->back()->with('error', 'No stock requests available for this user.');
+    public function destroy($id)
+    {
+        $stockRequest = StockRequest::findOrFail($id);
+
+        if ($stockRequest->status !== 'approved') {
+            return redirect()->back()->withErrors('Only approved stock requests can be deleted.');
+        }
+
+        $stockRequest->delete();
+
+        return redirect()->route('stock_requests.index')->with('success', 'Stock request deleted successfully.');
     }
-
-    // Generate the PDF with the user and stock requests data
-    $pdf = FacadePdf::loadView('stock_requests.report', [
-        'stockRequests' => $user->stockRequests,
-        'user' => $user,
-    ])->setPaper('a4', 'landscape');
-
-    // Return the generated PDF for download
-    return $pdf->download('user_stock_requests_report.pdf');
-}
-
-public function destroy($id)
-{
-    // Find the stock request by ID
-    $stockRequest = StockRequest::find($id);
-
-    if (!$stockRequest) {
-        return redirect()->back()->withErrors('Stock request not found.');
-    }
-
-    // Check if the stock request has been approved
-    if ($stockRequest->status !== 'approved') {
-        return redirect()->back()->withErrors('Only approved stock requests can be deleted.');
-    }
-
-    // Delete the stock request
-    $stockRequest->delete();
-
-    return redirect()->route('stock_requests.index')->with('success', 'Stock request deleted successfully.');
-}
-
-
 }
