@@ -69,25 +69,30 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Perihal Stok</th>
-                                    <th>Kuantiti Diminta / Diluluskan</th>
                                     <th>Tarikh Permohonan</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($requests as $request)
+                                @php
+                                    $groupedRequests = $requests->groupBy('group_id');
+                                @endphp
+                                @foreach ($groupedRequests as $groupId => $group)
                                     <tr>
-                                        <td>{{ $request->group_id }}</td>
-                                        <td>{{ $request->stock->description }}</td>
-                                        <td>{{ $request->date }}</td>
-                                        <td>
+                                        <td rowspan="{{ $group->count() }}">{{ $groupId }}</td>
+                                        <td rowspan="{{ $group->count() }}">{{ $group->first()->date }}</td>
+                                        <td rowspan="{{ $group->count() }}">
                                             <span
-                                                class="badge {{ $request->status === 'pending' ? 'badge-warning' : 'badge-success' }}">
-                                                {{ ucfirst($request->status) }}
+                                                class="badge {{ $group->first()->status === 'pending' ? 'badge-warning' : 'badge-success' }}">
+                                                {{ ucfirst($group->first()->status) }}
                                             </span>
                                         </td>
                                     </tr>
+                                    @foreach ($group->slice(1) as $request)
+                                        <tr>
+                                            <!-- Rows for additional data within the same group -->
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>

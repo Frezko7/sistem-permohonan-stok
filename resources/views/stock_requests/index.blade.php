@@ -16,7 +16,6 @@
         @endif
 
         <div class="overflow-x-auto">
-
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -31,52 +30,64 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($stockRequests as $request)
-                        <tr>
-                            <td>{{ $request->id }}</td>
-                            <td>{{ $request->user->name }}</td>
-                            <td>{{ $request->user->bahagian_unit ?? '-' }}</td>
-                            <td>{{ $request->user->phone_number ?? '-' }}</td>
-                            <td>
-                                <span
-                                    class="badge {{ $request->status === 'pending' ? 'badge-warning' : ($request->status === 'approved' ? 'badge-success' : 'badge-error') }}">
-                                    @if ($request->status === 'approved')
-                                        <i class="fas fa-check-circle"></i>
-                                    @else
-                                        {{ ucfirst($request->status) }}
-                                    @endif
-                                </span>
-                            </td>
-                            @if (auth()->user()->usertype === 'admin')
-                                <td>
-                                    @if ($request->status === 'pending')
-                                        <a href="{{ route('stock_requests.showApprovalForm', $request) }}"
-                                            class="btn btn-success btn-sm"
-                                            onclick="return confirm('Are you sure you want to approve this request?')">Approve</a>
-                                        <a href="{{ route('stock_requests.reject', $request) }}"
-                                            class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Are you sure you want to reject this request?')">Reject</a>
-                                    @endif
-                                    <a href="{{ route('stock_requests.report', ['userId' => $request->user->id]) }}"
-                                        class="btn btn-primary btn-sm">
-                                        <i class="fas fa-file-pdf"></i> Pdf
-                                    </a>
+                    @php
+                        $displayedGroups = [];
+                    @endphp
 
-                                    {{-- Delete Button --}}
-                                    @if ($request->status === 'approved')
-                                        <form action="{{ route('stock_requests.destroy', $request) }}" method="POST"
-                                            class="d-inline"
-                                            onsubmit="return confirm('Are you sure you want to delete this request?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </button>
-                                        </form>
-                                    @endif
+                    @foreach ($stockRequests as $request)
+                        @if (!in_array($request->group_id, $displayedGroups))
+                            @php
+                                $displayedGroups[] = $request->group_id;
+                            @endphp
+
+                            <tr>
+                                <td rowspan="{{ $stockRequests->where('group_id', $request->group_id)->count() }}">
+                                    {{ $request->group_id }}
                                 </td>
-                            @endif
-                        </tr>
+                                <td>{{ $request->user->name }}</td>
+                                <td>{{ $request->user->bahagian_unit ?? '-' }}</td>
+                                <td>{{ $request->user->phone_number ?? '-' }}</td>
+                                <td>
+                                    <span
+                                        class="badge {{ $request->status === 'pending' ? 'badge-warning' : ($request->status === 'approved' ? 'badge-success' : 'badge-error') }}">
+                                        @if ($request->status === 'approved')
+                                            <i class="fas fa-check-circle"></i>
+                                        @else
+                                            {{ ucfirst($request->status) }}
+                                        @endif
+                                    </span>
+                                </td>
+                                @if (auth()->user()->usertype === 'admin')
+                                    <td>
+                                        @if ($request->status === 'pending')
+                                            <a href="{{ route('stock_requests.showApprovalForm', $request) }}"
+                                                class="btn btn-success btn-sm"
+                                                onclick="return confirm('Are you sure you want to approve this request?')">Approve</a>
+                                            <a href="{{ route('stock_requests.reject', $request) }}"
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Are you sure you want to reject this request?')">Reject</a>
+                                        @endif
+                                        <a href="{{ route('stock_requests.report', ['userId' => $request->user->id]) }}"
+                                            class="btn btn-primary btn-sm">
+                                            <i class="fas fa-file-pdf"></i> Pdf
+                                        </a>
+
+                                        {{-- Delete Button --}}
+                                        @if ($request->status === 'approved')
+                                            <form action="{{ route('stock_requests.destroy', $request) }}" method="POST"
+                                                class="d-inline"
+                                                onsubmit="return confirm('Are you sure you want to delete this request?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </td>
+                                @endif
+                            </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>
