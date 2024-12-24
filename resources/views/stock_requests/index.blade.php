@@ -2,7 +2,7 @@
 
 @section('header')
     <h2 class="text-center font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Permohonan Stok') }}
+        {{ __('Senarai Permohonan') }}
     </h2>
 @endsection
 
@@ -19,7 +19,6 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>No.</th>
                         <th>Nama Pemohon</th>
                         <th>Bahagian/Unit</th>
                         <th>Nombor Telefon</th>
@@ -41,9 +40,7 @@
                             @endphp
 
                             <tr>
-                                <td rowspan="{{ $stockRequests->where('group_id', $request->group_id)->count() }}">
-                                    {{ $request->group_id }}
-                                </td>
+                                <td rowspan="1" style="display: none;">{{ $request->group_id }}</td>
                                 <td>{{ $request->user->name }}</td>
                                 <td>{{ $request->user->bahagian_unit ?? '-' }}</td>
                                 <td>{{ $request->user->phone_number ?? '-' }}</td>
@@ -67,23 +64,15 @@
                                                 class="btn btn-danger btn-sm"
                                                 onclick="return confirm('Are you sure you want to reject this request?')">Reject</a>
                                         @endif
-                                        <a href="{{ route('stock_requests.report', ['userId' => $request->user->id]) }}"
+                                        <a href="{{ route('stock_requests.view', ['groupId' => $request->group_id]) }}"
+                                            class="btn btn-warning btn-sm">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+
+                                        <a href="{{ route('stock_requests.report', ['groupId' => $request->group_id]) }}"
                                             class="btn btn-primary btn-sm">
                                             <i class="fas fa-file-pdf"></i> Pdf
                                         </a>
-
-                                        {{-- Delete Button --}}
-                                        @if ($request->status === 'approved')
-                                            <form action="{{ route('stock_requests.destroy', $request) }}" method="POST"
-                                                class="d-inline"
-                                                onsubmit="return confirm('Are you sure you want to delete this request?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash"></i> Delete
-                                                </button>
-                                            </form>
-                                        @endif
                                     </td>
                                 @endif
                             </tr>

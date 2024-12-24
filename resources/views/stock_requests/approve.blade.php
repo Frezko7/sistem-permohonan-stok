@@ -21,12 +21,12 @@
             </div>
         </div>
 
-        <!-- Approval Form for All Stock Requests -->
+        <!-- Approval Form for Pending Stock Requests -->
         <form action="{{ route('stock_requests.approve_all') }}" method="POST">
             @csrf
             <div class="card shadow-sm">
                 <div class="card-header bg-secondary text-white">
-                    <h4>Senarai Permohonan Stok</h4>
+                    <h4>Senarai Permohonan Stok (Belum Diluluskan)</h4>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered">
@@ -38,13 +38,14 @@
                                 <th>Tarikh</th>
                                 <th>Kuantiti Dimohon</th>
                                 <th>Kuantiti Diluluskan</th>
+                                <th>Tarikh Diluluskan</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($userStockRequests as $request)
                                 @if ($request->status === 'pending')
                                     <tr>
-                                        <td>{{ $request->id }}</td>
+                                        <td>{{ $request->group_id }}</td>
                                         <td>{{ $request->stock_id }}</td>
                                         <td>{{ $request->stock->description }}</td>
                                         <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
@@ -54,16 +55,12 @@
                                                 class="form-control" min="1"
                                                 max="{{ $request->requested_quantity }}" required>
                                         </td>
-                                    </tr>
-                                @else
-                                    <tr class="table-light">
-                                        <td>{{ $request->id }}</td>
-                                        <td>{{ $request->stock->id }}</td>
-                                        <td>{{ $request->stock->description }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
-                                        <td>{{ $request->requested_quantity }}</td>
                                         <td>
-                                            <span class="text-success fw-bold">Diluluskan</span>
+                                            <!-- Input for the approval date -->
+                                            <input type="date" name="approved_dates[{{ $request->id }}]"
+                                                class="form-control"
+                                                value="{{ old('approved_dates.' . $request->id, now()->format('Y-m-d')) }}"
+                                                required>
                                         </td>
                                     </tr>
                                 @endif

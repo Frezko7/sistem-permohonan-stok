@@ -79,18 +79,18 @@
                     <p>.....................................</p><br>
                     (Tandatangan)
                     <br>
-                    Nama: {{ $user->name }}<br>
-                    Jawatan: {{ $user->bahagian_unit }}<br>
-                    Tarikh: {{ now()->format('d/m/Y') }}
+                    Nama: {{ $request->user->name }}<br>
+                    Jawatan: {{ $request->user->bahagian_unit }}<br>
+                    Tarikh: {{ $request->date }}
                 </td>
                 <td colspan="3">
                     <strong>Pegawai Pelulus:</strong><br><br>
                     <p>.....................................</p><br>
                     (Tandatangan)
                     <br>
-                    Nama: <br>
-                    Jawatan: <br>
-                    Tarikh:
+                    Nama: {{ auth()->user()->name }}<br>
+                    Jawatan: {{ auth()->user()->bahagian_unit ?? 'N/A' }}<br>
+                    Tarikh: {{ $request->date_approved }}
                 </td>
                 <td colspan="2">
                     <strong>Pemohon/Wakil:</strong><br><br>

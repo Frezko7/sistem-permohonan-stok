@@ -80,49 +80,60 @@ public function showApprovalForm($id)
     return view('stock_requests.approve', compact('stockRequest', 'userStockRequests'));
 }
 
-    public function approve(Request $request, $id)
-    {
-        $stockRequest = StockRequest::findOrFail($id);
+public function approve(Request $request, $id)
+{
+    $stockRequest = StockRequest::findOrFail($id);
 
-        $request->validate([
-            'approved_quantity' => 'required|integer|min:1|max:' . $stockRequest->requested_quantity,
-        ]);
+    // Validate the approved quantity
+    $request->validate([
+        'approved_quantity' => 'required|integer|min:1|max:' . $stockRequest->requested_quantity,
+        'date_approved' => 'required|date',
+    ]);
 
-        $approvedQuantity = $request->input('approved_quantity');
+    $approvedQuantity = $request->input('approved_quantity');
+    $dateApproved = $request->input('date_approved');
 
-        $stockRequest->approved_quantity = $approvedQuantity;
-        $stockRequest->status = 'approved';
-        $stockRequest->save();
+    // Update the stock request
+    $stockRequest->approved_quantity = $approvedQuantity;
+    $stockRequest->date_approved = now(); // Record the approval date
+    $stockRequest->status = 'approved';
+    $stockRequest->save();
 
-        $stock = Stock::where('stock_id', $stockRequest->stock_id)->firstOrFail();
-        $stock->decreaseQuantity($approvedQuantity); // Ensure this method exists in the Stock model
+    // Update the stock quantity
+    $stock = Stock::where('stock_id', $stockRequest->stock_id)->firstOrFail();
+    $stock->decreaseQuantity($approvedQuantity); // Ensure this method is implemented in the Stock model
 
-        return redirect()->route('stock_requests.index')->with('success', 'Stock request approved and stock quantity updated successfully.');
-    }
+    return redirect()->route('stock_requests.index')->with('success', 'Stock request approved and stock quantity updated successfully.');
+}
 
-    public function approveAll(Request $request)
-    {
-        $approvedQuantities = $request->input('approved_quantities'); // This should be an array
+public function approveAll(Request $request)
+{
+    $approvedQuantities = $request->input('approved_quantities'); // Array of approved quantities
 
-        foreach ($approvedQuantities as $requestId => $approvedQuantity) {
-            $stockRequest = StockRequest::findOrFail($requestId);
+    foreach ($approvedQuantities as $requestId => $approvedQuantity) {
+        $stockRequest = StockRequest::findOrFail($requestId);
 
-            if ($stockRequest->status === 'approved') {
-                continue; // Skip already approved stock requests
-            }
-
-            if ($approvedQuantity <= $stockRequest->requested_quantity) {
-                $stockRequest->approved_quantity = $approvedQuantity;
-                $stockRequest->status = 'approved';
-                $stockRequest->save();
-
-                $stock = Stock::where('stock_id', $stockRequest->stock_id)->firstOrFail();
-                $stock->decreaseQuantity($approvedQuantity); // Ensure this method exists in the Stock model
-            }
+        // Skip already approved stock requests
+        if ($stockRequest->status === 'approved') {
+            continue;
         }
 
-        return redirect()->route('stock_requests.index')->with('success', 'All pending stock requests have been approved.');
+        // Validate the approved quantity
+        if ($approvedQuantity > 0 && $approvedQuantity <= $stockRequest->requested_quantity) {
+            // Update the stock request
+            $stockRequest->approved_quantity = $approvedQuantity;
+            $stockRequest->date_approved = now(); // Record the approval date
+            $stockRequest->status = 'approved';
+            $stockRequest->save();
+
+            // Update the stock quantity
+            $stock = Stock::where('stock_id', $stockRequest->stock_id)->firstOrFail();
+            $stock->decreaseQuantity($approvedQuantity); // Ensure this method is implemented in the Stock model
+        }
     }
+
+    return redirect()->route('stock_requests.index')->with('success', 'All pending stock requests have been approved.');
+}
 
     public function reject($id)
 {
@@ -138,36 +149,35 @@ public function showApprovalForm($id)
     return redirect()->route('stock_requests.index')->with('success', 'All stock requests in the group have been rejected successfully.');
 }
 
-    public function generateReport($userId)
-    {
-        $user = User::with('stockRequests.stock')->find($userId);
+// Method to preview the report
+public function viewReport($groupId)
+{
+    $stockRequests = StockRequest::where('group_id', $groupId)
+        ->with(['user', 'stock'])
+        ->get();
 
-        if (!$user) {
-            return redirect()->back()->with('error', 'User not found.');
-        }
+    return view('stock_requests.report', compact('stockRequests'));
+}
 
-        if ($user->stockRequests->isEmpty()) {
-            return redirect()->back()->with('error', 'No stock requests available for this user.');
-        }
+public function generateReport($groupId)
+{
+    $stockRequests = StockRequest::with('stock', 'user')
+        ->where('group_id', $groupId)
+        ->get();
 
-        $pdf = FacadePdf::loadView('stock_requests.report', [
-            'stockRequests' => $user->stockRequests,
-            'user' => $user,
-        ])->setPaper('a4', 'landscape');
-
-        return $pdf->download('user_stock_requests_report.pdf');
+    if ($stockRequests->isEmpty()) {
+        return redirect()->back()->with('error', 'No stock requests available for this group.');
     }
 
-    public function destroy($id)
-    {
-        $stockRequest = StockRequest::findOrFail($id);
+    // Retrieve the user (if applicable, from the first stock request or group context)
+    $user = $stockRequests->first()->user;
 
-        if ($stockRequest->status !== 'approved') {
-            return redirect()->back()->withErrors('Only approved stock requests can be deleted.');
-        }
+    $pdf = FacadePdf::loadView('stock_requests.report', [
+        'stockRequests' => $stockRequests,
+        'groupId' => $groupId,
+        'user' => $user, // Pass the user to the view
+    ])->setPaper('a4', 'landscape');
 
-        $stockRequest->delete();
-
-        return redirect()->route('stock_requests.index')->with('success', 'Stock request deleted successfully.');
-    }
+    return $pdf->download('group_stock_requests_report.pdf');
+}
 }

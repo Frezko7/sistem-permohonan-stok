@@ -38,6 +38,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/stock-suggestions', [StockController::class, 'getSuggestions'])->name('stock.suggestions');
 
+    // Route for previewing the report before generating
+    Route::get('/stock-requests/report/{groupId}/view', [StockRequestController::class, 'viewReport'])->name('stock_requests.view');
+
 
     // Admin routes
     Route::middleware('usertype:admin')->group(function () {
@@ -59,18 +62,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/stock_requests/{stockRequest}/reject', [StockRequestController::class, 'reject'])->name('stock_requests.reject');
 
         // Generate report
-        Route::get('/stock-requests/report/{userId}', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
+        Route::get('/stock-requests/report/{groupId}', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
         
-        //Route::get('/stock_requests/user/{userId}', [StockRequestController::class, 'userStockRequests'])->name('stock_requests.userRequests');
-
-        Route::delete('/stock-requests/{id}', [StockRequestController::class, 'destroy'])->name('stock_requests.destroy');
-
+        
     });
 
     // Applicant routes
     Route::middleware('usertype:applicant')->group(function () {
         Route::resource('stock_requests', StockRequestController::class)->only(['create', 'store']); // Applicants can create and view requests
     });
+    
 
 });
 

@@ -10,94 +10,94 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <!-- Dashboard Boxes -->
-                <div class="row mt-4">
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-warning">
-                            <div class="inner">
-                                <h3>{{ $userCount }}</h3>
-                                <p>Pengguna Berdaftar</p>
+                @if (auth()->user()->usertype === 'admin')
+                    <!-- Dashboard Boxes -->
+                    <div class="row mt-4">
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>{{ $userCount }}</h3>
+                                    <p>Pengguna Berdaftar</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="bi bi-people-fill"></i>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3>{{ $totalRequests }}</h3>
+                                    <p>Permohonan</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="bi bi-bag"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3>{{ $totalStock }}</h3>
+                                    <p>Stok</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="bi bi-boxes"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3>{{ $userCount }}</h3>
+                                    <p>Kategori</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="bi bi-border-all"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-info">
-                            <div class="inner">
-                                <h3>{{ $totalRequests }}</h3>
-                                <p>Permohonan</p>
-                            </div>
-                            <div class="icon">
-                                <i class="bi bi-bag"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <h3>{{ $totalStock }}</h3>
-                                <p>Stok</p>
-                            </div>
-                            <div class="icon">
-                                <i class="bi bi-boxes"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-danger">
-                            <div class="inner">
-                                <h3>{{ $userCount }}</h3>
-                                <p>Kategori</p>
-                            </div>
-                            <div class="icon">
-                                <i class="bi bi-border-all"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endif
 
                 <!-- Approved Stock Requests -->
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg bg-blue-100">
-                    <h2 class="text-xl font-semibold mb-8">Status Permohonan</h2>
+                @if (auth()->user()->usertype === 'applicant')
+                    <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg bg-blue-100">
+                        <h2 class="text-xl font-semibold mb-8">Status Permohonan</h2>
 
-                    @if ($requests->isEmpty())
-                        <p>Tiada permohonan stok.</p>
-                    @else
-                        <table class="table table-zebra w-full">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Tarikh Permohonan</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $groupedRequests = $requests->groupBy('group_id');
-                                @endphp
-                                @foreach ($groupedRequests as $groupId => $group)
+                        @if ($requests->isEmpty())
+                            <p>Tiada permohonan stok.</p>
+                        @else
+                            <table class="table table-zebra w-full">
+                                <thead>
                                     <tr>
-                                        <td rowspan="{{ $group->count() }}">{{ $groupId }}</td>
-                                        <td rowspan="{{ $group->count() }}">{{ $group->first()->date }}</td>
-                                        <td rowspan="{{ $group->count() }}">
-                                            <span
-                                                class="badge {{ $group->first()->status === 'pending' ? 'badge-warning' : 'badge-success' }}">
-                                                {{ ucfirst($group->first()->status) }}
-                                            </span>
-                                        </td>
+                                        <th>Nama Pemohon</th>
+                                        <th>Tarikh Permohonan</th>
+                                        <th>Status</th>
                                     </tr>
-                                    @foreach ($group->slice(1) as $request)
+                                </thead>
+                                <tbody>
+                                    @foreach ($requests as $request)
                                         <tr>
-                                            <!-- Rows for additional data within the same group -->
+                                            <td>{{ $request->user->name }}</td> <!-- Display user name -->
+                                            <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
+                                            <td>
+                                                <span
+                                                    class="badge {{ $request->status === 'pending' ? 'badge-warning' : 'badge-success' }}">
+                                                    {{ ucfirst($request->status) }}
+                                                </span>
+                                                <a href="{{ route('stock_requests.view', ['groupId' => $request->group_id]) }}"
+                                                    class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
                                         </tr>
                                     @endforeach
-                                @endforeach
-                            </tbody>
-                        </table>
-                    @endif
-                </div>
+                                </tbody>
+                            </table>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
     </div>

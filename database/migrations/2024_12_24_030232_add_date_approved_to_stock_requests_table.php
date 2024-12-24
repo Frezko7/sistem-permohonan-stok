@@ -9,15 +9,14 @@ return new class extends Migration
     public function up()
 {
     Schema::table('stock_requests', function (Blueprint $table) {
-        $table->date('date')->nullable()->after('status'); // Adds a nullable date column
+        $table->date('date_approved')->nullable()->after('approved_quantity'); // Adjust the position as needed
     });
 }
 
 public function down()
 {
     Schema::table('stock_requests', function (Blueprint $table) {
-        $table->dropColumn('date');
+        $table->dropColumn('date_approved');
     });
 }
-
 };

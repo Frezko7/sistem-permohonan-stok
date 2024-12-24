@@ -6,17 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    // In the migration file
+public function up()
 {
     Schema::table('stock_requests', function (Blueprint $table) {
-        $table->date('date')->nullable()->after('status'); // Adds a nullable date column
+        $table->integer('received_quantity')->nullable()->after('date_approved'); // Add the received_quantity field
     });
 }
 
 public function down()
 {
     Schema::table('stock_requests', function (Blueprint $table) {
-        $table->dropColumn('date');
+        $table->dropColumn('received_quantity');
     });
 }
 

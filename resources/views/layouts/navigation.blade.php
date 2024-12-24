@@ -29,7 +29,7 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @if (auth()->user()->usertype === 'admin')
                         <x-nav-link :href="route('stock_requests.index')" :active="request()->routeIs('stock_requests.index')">
-                            {{ __('Permohonan Stok') }}
+                            {{ __('Senarai Permohonan') }}
                         </x-nav-link>
                     @endif
                 </div>

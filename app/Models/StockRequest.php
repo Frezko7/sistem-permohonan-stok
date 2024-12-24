@@ -9,7 +9,7 @@ class StockRequest extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'stock_id' ,'requested_quantity', 'status', 'catatan', 'date', 'group_id'];
+    protected $fillable = ['user_id', 'stock_id' ,'requested_quantity', 'status', 'catatan', 'date', 'group_id', 'date_approved', 'received_quantity'];
 
     // Define the relationship to the Stock model
     public function stock()
@@ -28,4 +28,9 @@ class StockRequest extends Model
     {
         return $this->hasMany(StockRequest::class, 'group_id', 'group_id');
     }
+
+    public function stockRequest()
+    {
+    return $this->belongsTo(StockRequest::class);
+    }   
 }
