@@ -20,6 +20,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard');
 
 
+
 // Authenticated user routes
 Route::middleware('auth')->group(function () {
     // Profile routes
@@ -70,6 +71,9 @@ Route::middleware('auth')->group(function () {
     // Applicant routes
     Route::middleware('usertype:applicant')->group(function () {
         Route::resource('stock_requests', StockRequestController::class)->only(['create', 'store']); // Applicants can create and view requests
+
+        Route::get('/stock-requests/receive/{groupId}', [StockRequestController::class, 'showReceivedQuantityForm'])->name('stock_requests.receive');
+        Route::put('/stock-requests/update-received-quantities/{groupId}', [StockRequestController::class, 'updateReceivedQuantities'])->name('stock_requests.update_received_quantities');        
     });
     
 

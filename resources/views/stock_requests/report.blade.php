@@ -68,9 +68,9 @@
                     <td>{{ $request->catatan }}</td>
                     <td>{{ $request->stock->quantity }}</td>
                     <td>{{ $request->approved_quantity }}</td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
+                    <td>{{ $request->catatan }}</td>
+                    <td>{{ $request->received_quantity }}</td>
+                    <td>{{ $request->catatan }}</td>
                 </tr>
             @endforeach
             <tr>
@@ -88,8 +88,8 @@
                     <p>.....................................</p><br>
                     (Tandatangan)
                     <br>
-                    Nama: {{ auth()->user()->name }}<br>
-                    Jawatan: {{ auth()->user()->bahagian_unit ?? 'N/A' }}<br>
+                    Nama: Admin <br>
+                    Jawatan: Unit Aset dan Perolehan<br>
                     Tarikh: {{ $request->date_approved }}
                 </td>
                 <td colspan="2">
@@ -97,9 +97,9 @@
                     <p>.....................................</p><br>
                     (Tandatangan)
                     <br>
-                    Nama: <br>
-                    Jawatan: <br>
-                    Tarikh:
+                    Nama: {{ $request->user->name }}<br>
+                    Jawatan: {{ $request->user->bahagian_unit }}<br>
+                    Tarikh: {{ $request->date_received }}
                 </td>
             </tr>
         </tbody>

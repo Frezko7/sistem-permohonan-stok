@@ -61,6 +61,7 @@
                 @endif
 
                 <!-- Approved Stock Requests -->
+                <!-- Approved Stock Requests -->
                 @if (auth()->user()->usertype === 'applicant')
                     <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg bg-blue-100">
                         <h2 class="text-xl font-semibold mb-8">Status Permohonan</h2>
@@ -77,18 +78,31 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($requests as $request)
+                                    @php
+                                        $groupedRequests = $requests->groupBy('group_id'); // Group requests by group_id
+                                    @endphp
+
+                                    @foreach ($groupedRequests as $groupId => $group)
                                         <tr>
-                                            <td>{{ $request->user->name }}</td> <!-- Display user name -->
-                                            <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>
+                                            <!-- Nama Pemohon (from the first request in the group) -->
+                                            <td>{{ $group->first()->user->name }}</td>
+
+                                            <!-- Tarikh Permohonan (from the first request in the group) -->
+                                            <td>{{ $group->first()->date }}</td>
+
+                                            <!-- Status -->
                                             <td>
                                                 <span
-                                                    class="badge {{ $request->status === 'pending' ? 'badge-warning' : 'badge-success' }}">
-                                                    {{ ucfirst($request->status) }}
+                                                    class="badge {{ $group->first()->status === 'pending' ? 'badge-warning' : 'badge-success' }}">
+                                                    {{ ucfirst($group->first()->status) }}
                                                 </span>
-                                                <a href="{{ route('stock_requests.view', ['groupId' => $request->group_id]) }}"
+                                                <a href="{{ route('stock_requests.view', ['groupId' => $groupId]) }}"
                                                     class="btn btn-warning btn-sm">
                                                     <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('stock_requests.receive', ['groupId' => $groupId]) }}"
+                                                    class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-pencil-alt"></i> Sahkan
                                                 </a>
                                             </td>
                                         </tr>

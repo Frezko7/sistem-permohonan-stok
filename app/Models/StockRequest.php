@@ -9,7 +9,18 @@ class StockRequest extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'stock_id' ,'requested_quantity', 'status', 'catatan', 'date', 'group_id', 'date_approved', 'received_quantity'];
+    protected $fillable = [
+        'user_id',
+        'stock_id',
+        'requested_quantity',
+        'status',
+        'catatan',
+        'date',
+        'group_id',
+        'date_approved',
+        'received_quantity',
+        'date_received'
+    ];
 
     // Define the relationship to the Stock model
     public function stock()

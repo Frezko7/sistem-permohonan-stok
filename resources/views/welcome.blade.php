@@ -903,14 +903,10 @@
                 </div>
             </div>
 
-            <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
-                <div class="text-center text-sm sm:text-left">
-                    &nbsp;
-                </div>
-
-                <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
-                    <p>Hak Cipta © {{ date('Y') }} - Pejabat Daerah Tanah Hulu Selangor</p>
-                </div>
+            <div class="flex justify-center mt-16 px-0 sm:items-center">
+                <footer class="footer bg-base-300 text-base-content p-4 w-full">
+                    <p>Hak Cipta © 2024 - Pejabat Daerah Tanah Hulu Selangor</p>
+                </footer>
             </div>
         </div>
     </div>

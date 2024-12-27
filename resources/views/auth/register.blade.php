@@ -50,10 +50,32 @@
                 <!-- Bahagian/Unit -->
                 <div class="mt-4">
                     <x-input-label for="bahagian_unit" :value="__('Bahagian/Unit')" />
-                    <x-text-input id="bahagian_unit" class="block mt-1 w-full" type="text" name="bahagian_unit"
-                        :value="old('bahagian_unit')" required />
+                    <select id="bahagian_unit" class="block mt-1 w-full" name="bahagian_unit" required>
+                        <option value="" disabled selected>{{ __('Pilih Bahagian/Unit') }}</option>
+                        <option value="Bahagian Khidmat Pengurusan">--Bahagian Khidmat Pengurusan--</option>
+                        <option value="Unit Pentadbiran">Unit Pentadbiran</option>
+                        <option value="Unit Majlis Keraian">Unit Majlis Keraian</option>
+                        <option value="Unit Teknologi Maklumat">Unit Teknologi Maklumat</option>
+                        <option value="Unit Aset dan Perolehan">Unit Aset dan Perolehan</option>
+                        <option value="Unit Sumber Manusia">Unit Sumber Manusia</option>
+                        <option value="Unit Kewangan">Unit Kewangan</option>
+                        <option value="Bahagian Pembangunan">--Bahagian Pembangunan--</option>
+                        <option value="Unit Pembangunan Fizikal">Unit Pembangunan Fizikal</option>
+                        <option value="Unit Pembangunan Masyarakat">Unit Pembangunan Masyarakat</option>
+                        <option value="Bahagian Pengurusan Tanah">--Bahagian Pengurusan Tanah--</option>
+                        <option value="Unit Pembangunan Tanah">Unit Pembangunan Tanah</option>
+                        <option value="Unit Pelupusan Tanah">Unit Pelupusan Tanah</option>
+                        <option value="Unit Pendaftaran">Unit Pendaftaran</option>
+                        <option value="Unit Hasil">Unit Hasil</option>
+                        <option value="Unit Penguatkuasaan">Unit Penguatkuasaan</option>
+                        <option value="Unit Teknikal">Unit Teknikal</option>
+                        <option value="Pejabat Pegawai Daerah">--Pejabat Pegawai Daerah--</option>
+                        <option value="Unit Perundangan">Unit Perundangan</option>
+                        <option value="Unit Integriti">Unit Integriti</option>
+                    </select>
                     <x-input-error :messages="$errors->get('bahagian_unit')" class="mt-2" />
                 </div>
+
 
                 <!-- Phone Number -->
                 <div class="mt-4">

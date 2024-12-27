@@ -180,4 +180,51 @@ public function generateReport($groupId)
 
     return $pdf->download('group_stock_requests_report.pdf');
 }
+
+public function showReceivedQuantityForm($groupId)
+{
+    // Fetch stock requests for the specified group ID, including related stock details
+    $stockRequests = StockRequest::where('group_id', $groupId)
+        ->with('stock')
+        ->get();
+
+    if ($stockRequests->isEmpty()) {
+        return redirect()->route('stock_requests.index')->withErrors('Tiada stok untuk kemaskini.');
+    }
+
+    return view('stock_requests.receive', compact('stockRequests', 'groupId'));
+}
+
+public function updateReceivedQuantities(Request $request, $groupId)
+{
+    $validatedData = $request->validate([
+        'received_quantities' => 'required|array',
+        'received_quantities.*' => 'nullable|integer|min:0',
+        'catatan' => 'nullable|string|max:255',
+        'date_received' => 'nullable|date',
+    ]);
+
+    $stockRequests = StockRequest::where('group_id', $groupId)->get();
+
+    foreach ($stockRequests as $stockRequest) {
+        if (isset($validatedData['received_quantities'][$stockRequest->id])) {
+            $receivedQuantity = $validatedData['received_quantities'][$stockRequest->id];
+
+            if ($receivedQuantity > $stockRequest->approved_quantity) {
+                return redirect()->back()->withErrors([
+                    'received_quantities.' . $stockRequest->id => 'Kuantiti diterima tidak boleh melebihi kuantiti yang diluluskan.',
+                ]);
+            }
+
+            $stockRequest->update([
+                'received_quantity' => $receivedQuantity,
+                'catatan' => $request->catatan,
+                'date_received' => $request->date_received ?? now(),
+            ]);
+        }
+    }
+
+    return redirect()->route('dashboard')->with('success', 'Kuantiti diterima dan catatan berjaya dikemaskini.');
+}
+
 }
