@@ -61,7 +61,6 @@
                 @endif
 
                 <!-- Approved Stock Requests -->
-                <!-- Approved Stock Requests -->
                 @if (auth()->user()->usertype === 'applicant')
                     <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg bg-blue-100">
                         <h2 class="text-xl font-semibold mb-8">Status Permohonan</h2>

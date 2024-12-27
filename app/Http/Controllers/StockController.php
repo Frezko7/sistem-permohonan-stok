@@ -128,4 +128,23 @@ class StockController extends Controller
     // Return the view with the search results
     return view('catalog.index', compact('stocks', 'query'));
 }
+public function getStockDescription(Request $request)
+{
+    $stockId = $request->query('stock_id');
+    
+    if (!$stockId) {
+        return response()->json(['error' => 'Stock ID is required'], 400);
+    }
+
+    // Query the stock based on the stock code (assuming you use 'stock_id' for unique identification)
+    $stock = Stock::where('stock_id', $stockId)->first(); // Replace 'stock_id' with the actual column name if different
+
+    if ($stock) {
+        return response()->json(['description' => $stock->description]); // Assuming 'description' is the column name
+    }
+
+    return response()->json(['description' => null]); // If no stock found
+}
+
+
 }

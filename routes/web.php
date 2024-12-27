@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/stock-suggestions', [StockController::class, 'getSuggestions'])->name('stock.suggestions');
 
+    Route::get('/stock-description', [StockController::class, 'getStockDescription'])->name('stock.description');
+
     // Route for previewing the report before generating
     Route::get('/stock-requests/report/{groupId}/view', [StockRequestController::class, 'viewReport'])->name('stock_requests.view');
 
