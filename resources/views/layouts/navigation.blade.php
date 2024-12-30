@@ -21,7 +21,7 @@
                     @if (auth()->user()->usertype === 'admin')
                         <!-- Check if the user is an admin -->
                         <x-nav-link :href="route('stocks.index')" :active="request()->routeIs('stocks.*')">
-                            {{ __('Stok') }} <!-- Link to stock management page -->
+                            {{ __('Senarai Stok') }} <!-- Link to stock management page -->
                         </x-nav-link>
                     @endif
                 </div>

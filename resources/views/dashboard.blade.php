@@ -99,10 +99,12 @@
                                                     class="btn btn-warning btn-sm">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('stock_requests.receive', ['groupId' => $groupId]) }}"
-                                                    class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-pencil-alt"></i> Sahkan
-                                                </a>
+                                                @if ($group->first()->status === 'approved')
+                                                    <a href="{{ route('stock_requests.receive', ['groupId' => $groupId]) }}"
+                                                        class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-pencil-alt"></i> Sahkan
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

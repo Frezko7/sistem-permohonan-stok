@@ -24,7 +24,8 @@
             </div>
         @endif
 
-        <form action="{{ route('stock_requests.store') }}" method="POST" class="bg-base-200 p-6 rounded-lg shadow-md">
+        <form id="stock-form" action="{{ route('stock_requests.store') }}" method="POST"
+            class="bg-base-200 p-6 rounded-lg shadow-md">
             @csrf
 
             <div class="mb-4">
@@ -81,7 +82,7 @@
                 <textarea class="textarea textarea-bordered w-full" id="catatan" name="catatan" rows="3"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">Hantar</button>
+            <button type="submit" id="submit-button" class="btn btn-primary">Submit</button>
         </form>
     </div>
 
@@ -196,5 +197,26 @@
                 stockDescriptionDisplay.textContent = ''; // Clear display if stock ID is empty
             }
         }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('stock-form');
+            const submitButton = document.getElementById('submit-button');
+
+            form.addEventListener('submit', function(event) {
+                // Disable the submit button
+                submitButton.disabled = true;
+
+                // Optionally, change the button text to indicate submission
+                submitButton.textContent = 'Submitting...';
+
+                // Allow form submission
+                form.submit();
+
+                // If the request fails (e.g., using AJAX), you can re-enable the button:
+                // submitButton.disabled = false;
+                // submitButton.textContent = 'Submit';
+            });
+        });
     </script>
 @endsection
