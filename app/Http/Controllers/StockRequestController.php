@@ -23,51 +23,72 @@ class StockRequestController extends Controller
         return view('stock_requests.create', compact('stocks'));
     }
 
-public function store(Request $request)
-{
-    $groupId = Str::uuid(); // Generate a unique ID for the group
-
-    // Validate the request data
-    $request->validate([
-        'stock_ids' => 'required|array|min:1',
-        'stock_ids.*' => 'required|string|distinct',
-        'requested_quantities' => 'required|array|min:1',
-        'requested_quantities.*' => 'required|integer|min:1',
-        'date' => 'required|date',
-        'catatan' => 'nullable|string',
-    ]);
-
-    $invalidStockIds = [];
-
-    // Validate each stock_id to ensure it exists in the database
-    foreach ($request->stock_ids as $stock_id) {
-        if (!Stock::where('stock_id', $stock_id)->exists()) {
-            $invalidStockIds[] = $stock_id;
+    public function store(Request $request)
+    {
+        $groupId = Str::uuid(); // Generate a unique ID for the group
+    
+        // Validate the request data
+        $request->validate([
+            'stock_ids' => 'required|array|min:1',
+            'stock_ids.*' => 'required|numeric|distinct', // Ensure stock IDs are numbers
+            'requested_quantities' => 'required|array|min:1',
+            'requested_quantities.*' => 'required|integer|min:1', // Ensure quantities are integers
+            'date' => 'required|date',
+            'catatan' => 'nullable|string',
+        ]);        
+    
+        $invalidStockIds = [];
+        $exceededQuantities = [];
+    
+        // Validate each stock_id to ensure it exists in the database
+        foreach ($request->stock_ids as $index => $stock_id) {
+            $stock = Stock::where('stock_id', $stock_id)->first();
+    
+            if (!$stock) {
+                $invalidStockIds[] = $stock_id;
+            } elseif ($request->requested_quantities[$index] > $stock->quantity) {
+                $exceededQuantities[] = [
+                    'stock_id' => $stock_id,
+                    'available_quantity' => $stock->quantity,
+                    'requested_quantity' => $request->requested_quantities[$index]
+                ];
+            }
         }
+    
+        // If there are any invalid stock IDs or exceeded quantities, return an error
+        if (!empty($invalidStockIds)) {
+            return redirect()->back()
+                ->withErrors(['stock_ids' => 'The following stock IDs are invalid: ' . implode(', ', $invalidStockIds)])
+                ->withInput();
+        }
+    
+        if (!empty($exceededQuantities)) {
+            $exceededMessage = 'Permohonan stok gagal. Stok tidak mencukupi.';
+            foreach ($exceededQuantities as $exceeded) {
+                $exceededMessage .= "No. Kod: {$exceeded['stock_id']} (Mohon: {$exceeded['requested_quantity']}, Stok Sedia Ada: {$exceeded['available_quantity']}), ";
+            }
+            return redirect()->back()
+                ->withErrors(['requested_quantities' => rtrim($exceededMessage, ', ')])
+                ->withInput();
+        }
+    
+        // Loop through each stock_id and create a stock request for each
+        foreach ($request->stock_ids as $index => $stock_id) {
+            StockRequest::create([
+                'user_id' => auth()->id(),
+                'stock_id' => $stock_id,
+                'requested_quantity' => $request->requested_quantities[$index],
+                'status' => 'pending',
+                'catatan' => $request->catatan,
+                'date' => $request->date,
+                'group_id' => $groupId, // Save the same group_id for all requests
+            ]);
+        }
+    
+        return redirect()->route('stock_requests.create')
+            ->with('success', 'Stock request submitted successfully.');
     }
-
-    if (!empty($invalidStockIds)) {
-        return redirect()->back()
-            ->withErrors(['stock_ids' => 'The following stock IDs are invalid: ' . implode(', ', $invalidStockIds)])
-            ->withInput();
-    }
-
-    // Loop through each stock_id and create a stock request for each
-    foreach ($request->stock_ids as $index => $stock_id) {
-        StockRequest::create([
-            'user_id' => auth()->id(),
-            'stock_id' => $stock_id,
-            'requested_quantity' => $request->requested_quantities[$index],
-            'status' => 'pending',
-            'catatan' => $request->catatan,
-            'date' => $request->date,
-            'group_id' => $groupId, // Save the same group_id for all requests
-        ]);
-    }
-
-    return redirect()->route('stock_requests.create')
-        ->with('success', 'Stock request submitted successfully.');
-}
+    
 
 public function showApprovalForm($id)
 {

@@ -52,7 +52,6 @@
 
 
                 <button type="submit" class="btn btn-success">Kemaskini Kuantiti Diterima</button>
-                <a href="{{ route('stock_requests.index') }}" class="btn btn-secondary ms-2">Kembali</a>
             </form>
         @endif
     </div>

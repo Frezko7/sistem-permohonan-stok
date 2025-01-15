@@ -7,6 +7,21 @@
 @endsection
 
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
@@ -97,7 +112,7 @@
                                                 </span>
                                                 <a href="{{ route('stock_requests.view', ['groupId' => $groupId]) }}"
                                                     class="btn btn-warning btn-sm">
-                                                    <i class="fas fa-eye"></i>
+                                                    <i class="fas fa-eye"></i> Borang
                                                 </a>
                                                 @if ($group->first()->status === 'approved')
                                                     <a href="{{ route('stock_requests.receive', ['groupId' => $groupId]) }}"
