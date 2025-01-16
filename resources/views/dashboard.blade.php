@@ -89,6 +89,8 @@
                                         <th>Nama Pemohon</th>
                                         <th>Tarikh Permohonan</th>
                                         <th>Status</th>
+                                        <th>Perakuan Penerimaan</th>
+                                        <th>Borang</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -110,16 +112,24 @@
                                                     class="badge {{ $group->first()->status === 'pending' ? 'badge-warning' : 'badge-success' }}">
                                                     {{ ucfirst($group->first()->status) }}
                                                 </span>
-                                                <a href="{{ route('stock_requests.view', ['groupId' => $groupId]) }}"
-                                                    class="btn btn-warning btn-sm">
-                                                    <i class="fas fa-eye"></i> Borang
-                                                </a>
+                                            </td>
+                                            <td>
                                                 @if ($group->first()->status === 'approved')
                                                     <a href="{{ route('stock_requests.receive', ['groupId' => $groupId]) }}"
                                                         class="btn btn-primary btn-sm">
                                                         <i class="fas fa-pencil-alt"></i> Sahkan
                                                     </a>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('stock_requests.view', ['groupId' => $groupId]) }}"
+                                                    class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('stock_requests.report', ['groupId' => $groupId]) }}"
+                                                    class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-file-pdf"></i> Pdf
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach

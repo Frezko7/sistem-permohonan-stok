@@ -24,7 +24,7 @@
                         <th class="bg-base-200">Perihal Stok</th>
                         <th class="bg-base-200">Kuantiti</th>
                         @if (auth()->user()->usertype === 'admin')
-                            <th class="bg-base-200">Actions</th>
+                            <th class="bg-base-200"></th>
                         @endif
                     </tr>
                 </thead>

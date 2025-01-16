@@ -879,6 +879,12 @@
                 <img src="{{ asset('images/jata-without-bg.gif') }}" alt="Logo" style="width: 120px; height: auto;">
             </div>
 
+            <div class="flex justify-center items-center h-screen bg-gray-100">
+                <div class="p-10 bg-grey border rounded-lg shadow-md">
+                    <h1 class="text-4xl font-bold text-blue-500">Selamat Datang ke</h1>
+                </div>
+            </div>
+
             <h1 class="text-center text-5xl md:text-7xl font-bold text-gray-800">
                 Sistem Pengurusan Stor
             </h1>

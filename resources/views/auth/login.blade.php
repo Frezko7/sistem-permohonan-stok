@@ -1,5 +1,4 @@
 <x-guest-layout>
-
     <!-- Two-column Layout -->
     <div class="flex w-full max-w-7xl mx-auto">
         <!-- Left Side (Image) -->
@@ -44,8 +43,14 @@
                     </label>
                 </div>
 
-                <div class="flex items-center justify-end mt-4">
+                <div class="flex items-center justify-between mt-4">
+                    <!-- Forgot Password -->
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900"
+                        href="{{ route('password.request') }}">
+                        {{ __('Lupa Kata Laluan?') }}
+                    </a>
 
+                    <!-- Login Button -->
                     <x-primary-button class="ms-3">
                         {{ __('Log Masuk') }}
                     </x-primary-button>

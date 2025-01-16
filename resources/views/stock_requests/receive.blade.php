@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="my-4">Kemaskini Kuantiti Diterima</h2>
+        <h2 class="my-4">Perakuan Penerimaan</h2>
 
         @if ($stockRequests->isEmpty())
             <p>Tiada stok untuk dikemaskini.</p>
@@ -51,7 +51,7 @@
 
 
 
-                <button type="submit" class="btn btn-success">Kemaskini Kuantiti Diterima</button>
+                <button type="submit" class="btn btn-success">Sahkan</button>
             </form>
         @endif
     </div>

@@ -44,6 +44,9 @@ Route::middleware('auth')->group(function () {
     // Route for previewing the report before generating
     Route::get('/stock-requests/report/{groupId}/view', [StockRequestController::class, 'viewReport'])->name('stock_requests.view');
 
+     // Generate report
+     Route::get('/stock-requests/report/{groupId}', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
+
 
     // Admin routes
     Route::middleware('usertype:admin')->group(function () {
@@ -64,8 +67,7 @@ Route::middleware('auth')->group(function () {
         // Reject stock request
         Route::get('/stock_requests/{stockRequest}/reject', [StockRequestController::class, 'reject'])->name('stock_requests.reject');
 
-        // Generate report
-        Route::get('/stock-requests/report/{groupId}', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
+       
         
         
     });

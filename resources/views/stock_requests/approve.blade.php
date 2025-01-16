@@ -32,7 +32,6 @@
                     <table class="table table-bordered">
                         <thead class="table-dark">
                             <tr>
-                                <th>#</th>
                                 <th>No. Kod</th>
                                 <th>Perihal Stok</th>
                                 <th>Tarikh</th>
@@ -45,7 +44,6 @@
                             @foreach ($userStockRequests as $request)
                                 @if ($request->status === 'pending')
                                     <tr>
-                                        <td>{{ $request->group_id }}</td>
                                         <td>{{ $request->stock_id }}</td>
                                         <td>{{ $request->stock->description }}</td>
                                         <td>{{ \Carbon\Carbon::parse($request->created_at)->format('d/m/Y') }}</td>

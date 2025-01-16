@@ -65,7 +65,7 @@
                         <input type="number" class="input input-bordered w-full" name="requested_quantities[]"
                             placeholder="Kuantiti stok" required>
                     </div>
-                    <button type="button" class="btn btn-danger mt-6 remove-stock-item">Buang</button>
+                    <button type="button" class="btn btn-danger mt-6 remove-stock-item">Hapus</button>
                 </div>
             </div>
 
@@ -82,7 +82,7 @@
                 <textarea class="textarea textarea-bordered w-full" id="catatan" name="catatan" rows="3"></textarea>
             </div>
 
-            <button type="submit" id="submit-button" class="btn btn-primary">Submit</button>
+            <button type="submit" id="submit-button" class="btn btn-primary">Hantar</button>
         </form>
     </div>
 
