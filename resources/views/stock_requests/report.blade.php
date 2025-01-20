@@ -97,7 +97,7 @@
                     <p>.....................................</p><br>
                     (Tandatangan)
                     <br>
-                    Nama: {{ $request->user->name }}<br>
+                    Nama: {{ $request->received_name }}<br>
                     Jawatan: {{ $request->user->bahagian_unit }}<br>
                     Tarikh: {{ $request->date_received }}
                 </td>

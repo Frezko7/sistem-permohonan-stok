@@ -19,7 +19,8 @@ class StockRequest extends Model
         'group_id',
         'date_approved',
         'received_quantity',
-        'date_received'
+        'date_received',
+        'received_name',
     ];
 
     // Define the relationship to the Stock model
