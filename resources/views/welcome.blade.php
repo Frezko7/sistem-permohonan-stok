@@ -886,7 +886,7 @@
             </div>
 
             <h1 class="text-center text-5xl md:text-7xl font-bold text-gray-800">
-                Sistem Pengurusan Stor
+                Sistem Permohonan Stok
             </h1>
 
             <div class="mt-16">
