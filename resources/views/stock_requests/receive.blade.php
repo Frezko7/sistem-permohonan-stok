@@ -10,6 +10,18 @@
             <form action="{{ route('stock_requests.update_received_quantities', $groupId) }}" method="POST">
                 @csrf
                 @method('PUT')
+
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Maklumat Penerima</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="received_name" class="form-label">Nama Penerima:</label>
+                        <input type="text" class="form-control border-primary" id="received_name" name="received_name"
+                            placeholder="Masukkan nama penerima">
+                    </div>
+                </div>
+
                 <table class="table table-bordered">
                     <thead>
                         <tr>

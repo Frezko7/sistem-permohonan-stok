@@ -219,6 +219,7 @@ public function showReceivedQuantityForm($groupId)
 public function updateReceivedQuantities(Request $request, $groupId)
 {
     $validatedData = $request->validate([
+        'received_name' => 'required|string',
         'received_quantities' => 'required|array',
         'received_quantities.*' => 'nullable|integer|min:0',
         'catatan' => 'nullable|string|max:255',
@@ -238,6 +239,7 @@ public function updateReceivedQuantities(Request $request, $groupId)
             }
 
             $stockRequest->update([
+                'received_name' => $request->input('received_name'),
                 'received_quantity' => $receivedQuantity,
                 'catatan' => $request->catatan,
                 'date_received' => $request->date_received ?? now(),
