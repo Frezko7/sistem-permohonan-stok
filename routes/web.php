@@ -6,6 +6,7 @@ use App\Http\Controllers\StockRequestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CatalogController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileController;
 
 // Public routes
 Route::get('/', function () {
@@ -46,6 +47,9 @@ Route::middleware('auth')->group(function () {
 
      // Generate report
      Route::get('/stock-requests/report/{groupId}', [StockRequestController::class, 'generateReport'])->name('stock_requests.report');
+
+     Route::get('download-manual', [FileController::class, 'downloadManual'])->name('download.manual');
+
 
 
     // Admin routes

@@ -9,7 +9,7 @@
 
         <!-- Right Side (Login Form) -->
         <div class="w-full lg:w-1/2 p-8 bg-white shadow-lg rounded-lg">
-            <h2 class="text-3xl font-bold text-center mb-8">Sistem Pengurusan Stor</h2>
+            <h4 class="text-2xl font-bold text-center mb-8">Sistem Permohonan Stok</h4>
 
             <!-- Session Status -->
             <x-auth-session-status class="mb-4" :status="session('status')" />

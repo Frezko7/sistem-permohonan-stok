@@ -10,7 +10,7 @@
 
         <!-- Right Side (Registration Form) -->
         <div class="w-full lg:w-1/2 p-8 bg-white shadow-lg rounded-lg">
-            <h2 class="text-3xl font-bold text-center mb-8">Sistem Pengurusan Aset</h2>
+            <h2 class="text-2xl font-bold text-center mb-8">Sistem Permohonan Stok</h2>
 
             <form method="POST" action="{{ route('register') }}">
                 @csrf

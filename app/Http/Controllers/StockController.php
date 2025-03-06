@@ -52,7 +52,7 @@ class StockController extends Controller
         'image' => $imagePath, // Save the image path in the database
     ]);
 
-    return redirect()->route('stocks.index')->with('success', 'Stock added successfully!');
+    return redirect()->route('stocks.index')->with('success', 'Stok berjaya ditambah!');
 }
 
 
@@ -66,38 +66,42 @@ class StockController extends Controller
 
     // Update stock
     public function update(Request $request, $id)
-    {
-        // Validate the input data, including image (optional)
-        $validatedData = $request->validate([
-            'description' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image is now optional
-        ]);
-    
-        // Find the stock by ID
-        $stock = Stock::findOrFail($id);
-    
-        // Update the stock details
-        $stock->description = $validatedData['description'];
-        $stock->quantity = $validatedData['quantity'];
-    
-        // Handle image upload if a new image is uploaded
-        if ($request->hasFile('image')) {
-            // Delete the old image if it exists
-            if ($stock->image) {
-                Storage::delete('public/' . $stock->image); // Ensure 'public/' is included in the old image path
+{
+    // Validate the input data, including image (optional)
+    $validatedData = $request->validate([
+        'description' => 'required|string|max:255',
+        'quantity' => 'required|integer|min:1',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image is now optional
+    ]);
+
+    // Find the stock by ID
+    $stock = Stock::findOrFail($id);
+
+    // Update the stock details
+    $stock->description = $validatedData['description'];
+    $stock->quantity = $validatedData['quantity'];
+
+    // Handle image upload if a new image is uploaded
+    if ($request->hasFile('image')) {
+        // Check if there is an old image, and delete it if exists
+        if ($stock->image) {
+            $oldImagePath = 'public/' . $stock->image;
+            if (Storage::exists($oldImagePath)) {
+                Storage::delete($oldImagePath);  // Delete the old image
             }
-    
-            // Store the new image in the 'public/images' directory
-            $stock->image = $request->file('image')->store('images', 'public');
         }
+
+        // Store the new image in the 'public/images' directory
+        $stock->image = $request->file('image')->store('images', 'public');
+    }
+
+    // Save the updated stock
+    $stock->save();
+
+    // Redirect with success message
+    return redirect()->route('stocks.index')->with('success', 'Stok berjaya dikemaskini.');
+}
     
-        // Save the updated stock
-        $stock->save();
-    
-        // Redirect with success message
-        return redirect()->route('stocks.index')->with('success', 'Stock updated successfully!');
-    }    
 
     // Delete stock
     public function destroy($id)
@@ -105,7 +109,7 @@ class StockController extends Controller
         $stock = Stock::findOrFail($id);
         $stock->delete();
 
-        return redirect()->route('stocks.index')->with('success', 'Stock deleted successfully.');
+        return redirect()->route('stocks.index')->with('success', 'Stok berjaya dihapus.');
     }
 
     public function search(Request $request)

@@ -6,7 +6,7 @@
 
         <form method="POST" action="{{ route('stocks.update', $stock->stock_id) }}" enctype="multipart/form-data">
             @csrf
-            @method('PUT') <!-- Method spoofing for PUT -->
+            @method('PUT') 
 
             <div class="mb-3">
                 <label for="description" class="form-label">Perihal Stok:</label>

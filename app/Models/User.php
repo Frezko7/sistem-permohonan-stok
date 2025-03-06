@@ -29,7 +29,8 @@ class User extends Authenticatable
         'password',
         'bahagian_unit',
         'phone_number',
-    ];    
+        'usertype', 
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -50,4 +51,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function isAdmin()
+{
+    return $this->usertype === 'admin';
+}
+
 }

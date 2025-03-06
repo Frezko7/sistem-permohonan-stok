@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use App\Models\User;
 use Illuminate\Support\Str;
+use App\Mail\ApplicationStatusMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class StockRequestController extends Controller
 {
@@ -101,37 +104,27 @@ public function showApprovalForm($id)
     return view('stock_requests.approve', compact('stockRequest', 'userStockRequests'));
 }
 
-public function approve(Request $request, $id)
-{
-    $stockRequest = StockRequest::findOrFail($id);
-
-    // Validate the approved quantity
-    $request->validate([
-        'approved_quantity' => 'required|integer|min:1|max:' . $stockRequest->requested_quantity,
-        'date_approved' => 'required|date',
-    ]);
-
-    $approvedQuantity = $request->input('approved_quantity');
-    $dateApproved = $request->input('date_approved');
-
-    // Update the stock request
-    $stockRequest->approved_quantity = $approvedQuantity;
-    $stockRequest->date_approved = now(); // Record the approval date
-    $stockRequest->status = 'approved';
-    $stockRequest->save();
-
-    // Update the stock quantity
-    $stock = Stock::where('stock_id', $stockRequest->stock_id)->firstOrFail();
-    $stock->decreaseQuantity($approvedQuantity); // Ensure this method is implemented in the Stock model
-
-    return redirect()->route('stock_requests.index')->with('success', 'Stock request approved and stock quantity updated successfully.');
-}
-
 public function approveAll(Request $request)
 {
-    $approvedQuantities = $request->input('approved_quantities'); // Array of approved quantities
+    // Get inputs
+    $approvedQuantities = $request->input('approved_quantities', []);
+    $approvedDates = $request->input('approved_dates', []);
+    $approverName = $request->input('approver_name');
+    $approverBahagianUnit = $request->input('approver_bahagian_unit');
 
+    // Validate inputs
+    $validatedData = $request->validate([
+        'approver_name' => 'required|string|max:255',
+        'approver_bahagian_unit' => 'required|string|max:255',
+        'approved_quantities' => 'required|array',
+        'approved_quantities.*' => 'required|integer|min:1',
+        'approved_dates' => 'required|array',
+        'approved_dates.*' => 'required|date',
+    ]);
+
+    // Iterate over each request to approve
     foreach ($approvedQuantities as $requestId => $approvedQuantity) {
+        // Find stock request
         $stockRequest = StockRequest::findOrFail($requestId);
 
         // Skip already approved stock requests
@@ -139,21 +132,42 @@ public function approveAll(Request $request)
             continue;
         }
 
-        // Validate the approved quantity
-        if ($approvedQuantity > 0 && $approvedQuantity <= $stockRequest->requested_quantity) {
-            // Update the stock request
-            $stockRequest->approved_quantity = $approvedQuantity;
-            $stockRequest->date_approved = now(); // Record the approval date
-            $stockRequest->status = 'approved';
-            $stockRequest->save();
-
-            // Update the stock quantity
-            $stock = Stock::where('stock_id', $stockRequest->stock_id)->firstOrFail();
-            $stock->decreaseQuantity($approvedQuantity); // Ensure this method is implemented in the Stock model
+        // Ensure that the approved quantity doesn't exceed the requested quantity
+        if ($approvedQuantity > $stockRequest->requested_quantity) {
+            // Handle the case where the quantity exceeds (you could throw an exception or skip)
+            continue;
         }
+
+        // Update the stock request
+        $stockRequest->approved_quantity = $approvedQuantity;
+        $stockRequest->date_approved = $approvedDates[$requestId];
+        $stockRequest->approved_name = $approverName;
+        $stockRequest->approved_bahagian_unit = $approverBahagianUnit;
+        $stockRequest->status = 'approved';
+        $stockRequest->save();
+
+        // Update the stock quantity
+        $stock = Stock::where('stock_id', $stockRequest->stock_id)->firstOrFail();
+        $stock->decreaseQuantity($approvedQuantity);
+
+        // Check if the stock request has associated stock items and map them
+        $stockItems = $stockRequest->stocks ? $stockRequest->stocks->map(function ($stockItem) {
+            return $stockItem->description; // Assuming 'description' is the correct field
+        })->toArray() : [];
+
+        // Prepare the email details
+        $details = [
+            'name' => $stockRequest->user->name,
+            'stock_items' => $stockItems, // Array of stock descriptions
+            'message' => 'Your stock request has been approved.',
+        ];
+
+        // Send the approval email
+        Mail::to($stockRequest->user->email)->send(new ApplicationStatusMail('approved', $details));
     }
 
-    return redirect()->route('stock_requests.index')->with('success', 'All pending stock requests have been approved.');
+    // Redirect with success message
+    return redirect()->route('stock_requests.index')->with('success', 'Semua permohonan stok telah diluluskan.');
 }
 
     public function reject($id)
@@ -220,6 +234,7 @@ public function updateReceivedQuantities(Request $request, $groupId)
 {
     $validatedData = $request->validate([
         'received_name' => 'required|string',
+        'received_bahagian_unit' => 'required|string|max:255',
         'received_quantities' => 'required|array',
         'received_quantities.*' => 'nullable|integer|min:0',
         'catatan' => 'nullable|string|max:255',
@@ -240,6 +255,7 @@ public function updateReceivedQuantities(Request $request, $groupId)
 
             $stockRequest->update([
                 'received_name' => $request->input('received_name'),
+                'received_bahagian_unit' => $request->input('received_bahagian_unit'),
                 'received_quantity' => $receivedQuantity,
                 'catatan' => $request->catatan,
                 'date_received' => $request->date_received ?? now(),

@@ -35,9 +35,16 @@
 
 <body>
 
+<p>Pekeliling Perbendaharaan Malaysia<br> Lampiran B</p>
+
+<div style="position: absolute; top: 10px; right: 10px; text-align: right;">
+    <p>KEW.PS-8</p>
+    <p>No. BPSI:.......</p>
+</div>
+
+
     <div class="header">
-        <h4>BORANG PERMOHONAN STOK (INDIVIDU KEPADA STOR)</h4>
-        <p>Pekeliling Perbendaharaan Malaysia, Lampiran B</p>
+        <h4>BORANG PERMOHONAN STOK <br>(INDIVIDU KEPADA STOR)</h4>
     </div>
 
     <table>
@@ -88,8 +95,8 @@
                     <p>.....................................</p><br>
                     (Tandatangan)
                     <br>
-                    Nama: Admin <br>
-                    Jawatan: Unit Aset dan Perolehan<br>
+                    Nama: {{ $request->approved_name }}<br>
+                    Jawatan: {{ $request->approved_bahagian_unit }}<br>
                     Tarikh: {{ $request->date_approved }}
                 </td>
                 <td colspan="2">
@@ -98,7 +105,7 @@
                     (Tandatangan)
                     <br>
                     Nama: {{ $request->received_name }}<br>
-                    Jawatan: {{ $request->user->bahagian_unit }}<br>
+                    Jawatan: {{ $request->received_bahagian_unit }}<br>
                     Tarikh: {{ $request->date_received }}
                 </td>
             </tr>

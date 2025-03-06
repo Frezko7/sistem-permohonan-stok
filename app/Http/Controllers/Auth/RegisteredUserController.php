@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class RegisteredUserController extends Controller
 {
@@ -43,13 +46,12 @@ class RegisteredUserController extends Controller
         'email' => $request->email,
         'password' => Hash::make($request->password),
         'bahagian_unit' => $request->bahagian_unit, 
-        'phone_number' => $request->phone_number,   
+        'phone_number' => $request->phone_number,
+        'usertype' => 'applicant',   
     ]);
 
-    event(new Registered($user));
-
+    Mail::to($user->email)->send(new WelcomeMail($user));
     Auth::login($user);
-
     return redirect(RouteServiceProvider::HOME);
 }
 

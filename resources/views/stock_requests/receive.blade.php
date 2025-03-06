@@ -20,6 +20,32 @@
                         <input type="text" class="form-control border-primary" id="received_name" name="received_name"
                             placeholder="Masukkan nama penerima">
                     </div>
+                    <div class="form-group">
+                        <label for="received_bahagian_unit" class="form-label">Bahagian/Unit Penerima:</label>
+                        <select class="form-control border-primary" id="received_bahagian_unit" name="received_bahagian_unit">
+                        <option value="" disabled selected>{{ __('Pilih Bahagian/Unit') }}</option>
+                        <option value="Bahagian Khidmat Pengurusan">--Bahagian Khidmat Pengurusan--</option>
+                        <option value="Unit Pentadbiran">Unit Pentadbiran</option>
+                        <option value="Unit Majlis Keraian">Unit Majlis Keraian</option>
+                        <option value="Unit Teknologi Maklumat">Unit Teknologi Maklumat</option>
+                        <option value="Unit Aset dan Perolehan">Unit Aset dan Perolehan</option>
+                        <option value="Unit Sumber Manusia">Unit Sumber Manusia</option>
+                        <option value="Unit Kewangan">Unit Kewangan</option>
+                        <option value="Bahagian Pembangunan">--Bahagian Pembangunan--</option>
+                        <option value="Unit Pembangunan Fizikal">Unit Pembangunan Fizikal</option>
+                        <option value="Unit Pembangunan Masyarakat">Unit Pembangunan Masyarakat</option>
+                        <option value="Bahagian Pengurusan Tanah">--Bahagian Pengurusan Tanah--</option>
+                        <option value="Unit Pembangunan Tanah">Unit Pembangunan Tanah</option>
+                        <option value="Unit Pelupusan Tanah">Unit Pelupusan Tanah</option>
+                        <option value="Unit Pendaftaran">Unit Pendaftaran</option>
+                        <option value="Unit Hasil">Unit Hasil</option>
+                        <option value="Unit Penguatkuasaan">Unit Penguatkuasaan</option>
+                        <option value="Unit Teknikal">Unit Teknikal</option>
+                        <option value="Pejabat Pegawai Daerah">--Pejabat Pegawai Daerah--</option>
+                        <option value="Unit Perundangan">Unit Perundangan</option>
+                        <option value="Unit Integriti">Unit Integriti</option>
+                        </select>
+                    </div>
                 </div>
 
                 <table class="table table-bordered">

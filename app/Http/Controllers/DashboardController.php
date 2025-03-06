@@ -21,7 +21,7 @@ class DashboardController extends Controller
         // Fetch stock requests that are either 'pending' or 'approved' for the logged-in user
         $requests = StockRequest::with('stock')
             ->where('user_id', $userId)
-            ->whereIn('status', ['pending', 'approved'])
+            ->whereIn('status', ['pending', 'approved','rejected'])
             ->get();
 
         // Count total stock in the database

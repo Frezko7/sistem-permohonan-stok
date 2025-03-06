@@ -2,10 +2,11 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+   
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>Sistem Permohonan Stok</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -691,7 +692,18 @@
         .z-10 {
             z-index: 10
         }
-
+        .body-bg {
+            background-image: url('/images/header.jpg');
+            background-size: cover; /* Untuk penuhkan ruang */
+            background-position: center;
+            background-repeat: no-repeat;
+            /*height: 960px; /* Tetapkan ketinggian mengikut keperluan */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white; /* Jika teks ingin berwarna putih */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
         @media (prefers-reduced-motion: no-preference) {
             .motion-safe\:hover\:scale-\[1\.01\]:hover {
                 --tw-scale-x: 1.01;
@@ -849,9 +861,11 @@
             }
         }
     </style>
+    </div>
 </head>
 
 <body class="antialiased">
+<div class="body-bg">
     <div
         class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-black selection:bg-red-500 selection:text-white">
         @if (Route::has('login'))
@@ -875,46 +889,29 @@
 
         <div class="max-w-7xl mx-auto p-6 lg:p-8">
 
-            <div class="flex justify-center">
-                <img src="{{ asset('images/jata-without-bg.gif') }}" alt="Logo" style="width: 120px; height: auto;">
-            </div>
+           
 
             <div class="flex justify-center items-center h-screen bg-gray-100">
                 <div class="p-10 bg-grey border rounded-lg shadow-md">
-                    <h1 class="text-4xl font-bold text-blue-500">Selamat Datang ke</h1>
+                  
                 </div>
             </div>
 
-            <h1 class="text-center text-5xl md:text-7xl font-bold text-gray-800">
-                Sistem Pengurusan Stor
-            </h1>
+        
+              
+          
 
             <div class="mt-16">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 image-container">
-                    <div>
-                        <img src="{{ asset('images/pejabat.png') }}" style="width: 360px; height: auto;">
-                    </div>
-
-                    <div>
-                        <img src="{{ asset('images/IMG_1623.jpg') }}" style="width: 360px; height: auto;">
-                    </div>
-
-                    <div>
-                        <img src="{{ asset('images/IMG_1632.jpg') }}" style="width: 360px; height: auto;">
-                    </div>
-
-                    <div>
-                        <img src="{{ asset('images/IMG_5303.jpg') }}" style="width: 360px; height: auto;">
-                    </div>
+                   
                 </div>
             </div>
 
             <div class="flex justify-center mt-16 px-0 sm:items-center">
-                <footer class="footer bg-base-300 text-base-content p-4 w-full">
-                    <p>Hak Cipta © 2024 - Pejabat Daerah Tanah Hulu Selangor</p>
-                </footer>
+        
             </div>
         </div>
+    </div>
     </div>
 </body>
 

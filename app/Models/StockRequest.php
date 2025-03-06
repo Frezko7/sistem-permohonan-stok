@@ -21,12 +21,15 @@ class StockRequest extends Model
         'received_quantity',
         'date_received',
         'received_name',
+        'received_bahagian_unit',
+        'approved_name',
+        'approved_bahagian_unit',
     ];
 
     // Define the relationship to the Stock model
     public function stock()
     {
-        return $this->belongsTo(Stock::class, 'stock_id');
+        return $this->belongsTo(Stock::class, 'stock_id',);
     }    
 
     // Define the relationship to the User model
